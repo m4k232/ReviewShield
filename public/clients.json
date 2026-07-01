@@ -1,0 +1,12 @@
+{
+  "barber_warszawa": {
+    "name": "The Gilded Edge Barber Shop",
+    "logo": "/assets/barber_logo.jpg",
+    "googleMapsUrl": "https://search.google.com/local/writereview?placeid=ChIJyXGv9r1aD0cR_P2O-6pT6kQ"
+  },
+  "pizza_krakow": {
+    "name": "Slice & Stone Pizzeria",
+    "logo": "/assets/pizza_logo.jpg",
+    "googleMapsUrl": "https://search.google.com/local/writereview?placeid=ChIJ8_zT6k1bF0cRl8_4D0eF5jU"
+  }
+}
