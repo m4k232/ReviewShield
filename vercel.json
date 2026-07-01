@@ -1,5 +1,4 @@
 {
-  "cleanUrls": true,
   "routes": [
     { "src": "/api/feedback", "dest": "/api/index.py" },
     { "src": "/style.css", "dest": "/public/style.css" },
