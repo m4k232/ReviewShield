@@ -1,8 +1,11 @@
 {
   "cleanUrls": true,
-  "routes": [
-    { "src": "/api/feedback", "dest": "/api/index.py" },
-    { "src": "/(style\\.css|script\\.js|clients\\.json|assets/.*)", "dest": "/public/$1" },
-    { "src": "/(.*)", "dest": "/public/index.html" }
+  "rewrites": [
+    { "source": "/api/feedback", "destination": "/api/index.py" },
+    { "source": "/", "destination": "/public/index.html" },
+    { "source": "/style.css", "destination": "/public/style.css" },
+    { "source": "/script.js", "destination": "/public/script.js" },
+    { "source": "/clients.json", "destination": "/public/clients.json" },
+    { "source": "/assets/(.*)", "destination": "/public/assets/$1" }
   ]
 }
