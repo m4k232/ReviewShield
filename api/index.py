@@ -5,6 +5,45 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler
 
 class handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        path = self.path
+        if '?' in path:
+            path = path.split('?')[0]
+            
+        if path == "/" or path == "" or path == "/index.html":
+            candidates = [
+                os.path.join(os.getcwd(), 'public', 'index.html'),
+                os.path.join(os.path.dirname(__file__), '..', 'public', 'index.html'),
+                'public/index.html'
+            ]
+            
+            content = None
+            for p in candidates:
+                if os.path.exists(p) and os.path.isfile(p):
+                    try:
+                        with open(p, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                        break
+                    except Exception:
+                        pass
+                        
+            if content is not None:
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/html; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(content.encode('utf-8'))
+                return
+            else:
+                self.send_response(404)
+                self.send_header('Content-Type', 'text/plain; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(b"index.html not found on server")
+                return
+                
+        self.send_response(404)
+        self.end_headers()
+        self.wfile.write(b"404 Not Found")
+
     def do_POST(self):
         # 1. Parse content type
         content_type = self.headers.get('Content-Type', '')
