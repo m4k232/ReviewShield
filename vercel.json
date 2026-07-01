@@ -1,3 +1,11 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "routes": [
+    { "src": "/api/feedback", "dest": "/api/index.py" },
+    { "src": "/style.css", "dest": "/public/style.css" },
+    { "src": "/script.js", "dest": "/public/script.js" },
+    { "src": "/clients.json", "dest": "/public/clients.json" },
+    { "src": "/assets/(.*)", "dest": "/public/assets/$1" },
+    { "src": "/(.*)", "dest": "/public/index.html" }
+  ]
 }
