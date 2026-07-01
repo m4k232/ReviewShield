@@ -1,2 +1,10 @@
+[project]
+name = "reviewshield"
+version = "0.1.0"
+dependencies = [
+    "gspread>=6.0.0",
+    "google-auth>=2.0.0"
+]
+
 [tool.vercel]
 entrypoint = "api.router:handler"
