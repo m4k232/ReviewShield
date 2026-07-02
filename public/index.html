@@ -37,6 +37,71 @@
       </div>
     </section>
 
+    <!-- Screen 4: Product Landing Page -->
+    <section id="screen-landing" class="screen-view hidden" hidden>
+      <div class="landing-card card">
+        <header class="landing-header">
+          <div class="logo-shield">🛡️</div>
+          <h1 class="logo-title">ReviewShield</h1>
+        </header>
+
+        <div class="landing-hero">
+          <h2 class="hero-title">Chroń oceny w Google Maps i zatrzymaj negatywne opinie</h2>
+          <p class="hero-subtitle">Inteligentny system filtracji opinii za pomocą kodów QR dla restauracji, salonów urody, barberów i auto-detailingów.</p>
+        </div>
+
+        <div class="landing-steps">
+          <div class="step-card">
+            <span class="step-num">1</span>
+            <h3>Skanowanie QR</h3>
+            <p class="step-p">Klient skanuje kod QR znajdujący się na stoliku, recepcji lub przy rachunku.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">2</span>
+            <h3>Inteligentny filtr</h3>
+            <p class="step-p">Zadowoleni goście (4-5★) idą pisać opinię w Google. Niezadowoleni (1-3★) trafiają do prywatnego formularza.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">3</span>
+            <h3>Wzrost ocen</h3>
+            <p class="step-p">Unikasz publicznych 1-gwiazdkowych ocen w Google, dostając szansę na rozwiązanie problemu klienta prywatnie.</p>
+          </div>
+        </div>
+
+        <div class="landing-cta-container">
+          <p class="demo-label">Wypróbuj wersję demonstracyjną dla klientów:</p>
+          <div class="landing-demo-buttons">
+            <a href="?client=barber_warszawa" class="btn btn-primary">Demo Barbera</a>
+            <a href="?client=pizza_krakow" class="btn btn-secondary">Demo Pizzerii</a>
+          </div>
+        </div>
+
+        <div class="landing-pricing">
+          <div class="pricing-card">
+            <span class="pricing-badge">Złoty pakiet</span>
+            <h3>Abonament</h3>
+            <div class="price">99 zł<span> / miesięcznie</span></div>
+            <p class="pricing-desc">Pierwsze 14 dni całkowicie za darmo. My dostarczamy spersonalizowany kod QR i wsparcie.</p>
+          </div>
+        </div>
+
+        <div class="landing-contact">
+          <h3>Zamów darmowy test na 14 dni</h3>
+          <p class="contact-desc">Wpisz swój e-mail, a przygotujemy dedykowany system QR pod Twoje zbiory opinii.</p>
+          <form id="landing-contact-form" novalidate>
+            <div class="input-group">
+              <input type="email" id="landing-email" class="form-input" placeholder="Twój e-mail..." required />
+              <span class="error-msg" id="landing-email-error"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Chcę darmowy test</button>
+          </form>
+          <div id="landing-contact-success" class="hidden text-success">
+            Dziękujemy! Skontaktujemy się z Tobą w ciągu 24 godzin.
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Screen 1: Star Rating -->
     <section id="screen-rating" class="screen-view hidden" hidden>
       <div class="card rating-card">

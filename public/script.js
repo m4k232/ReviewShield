@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   // --- DOM Elements ---
+  const appContainer = document.getElementById('app-container');
   const screenLoading = document.getElementById('screen-loading');
   const screenError = document.getElementById('screen-error');
   const screenRating = document.getElementById('screen-rating');
   const screenFeedback = document.getElementById('screen-feedback');
   const screenSuccess = document.getElementById('screen-success');
+  const screenLanding = document.getElementById('screen-landing');
 
   const errorTitle = document.getElementById('error-title');
   const errorDesc = document.getElementById('error-desc');
@@ -26,6 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const messageError = document.getElementById('message-error');
   const phoneError = document.getElementById('phone-error');
 
+  const landingContactForm = document.getElementById('landing-contact-form');
+  const landingEmail = document.getElementById('landing-email');
+  const landingEmailError = document.getElementById('landing-email-error');
+  const landingContactSuccess = document.getElementById('landing-contact-success');
+
   // --- State Variables ---
   let clientId = '';
   let clientConfig = null;
@@ -34,8 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Transition Helper ---
   // Safely toggles screens using classList + hidden attribute
   function showScreen(targetScreen) {
-    const screens = [screenLoading, screenError, screenRating, screenFeedback, screenSuccess];
+    const screens = [screenLoading, screenError, screenRating, screenFeedback, screenSuccess, screenLanding];
     
+    // Toggle active container styling for landing vs mobile survey
+    if (targetScreen === screenLanding) {
+      appContainer.classList.add('landing-active');
+    } else {
+      appContainer.classList.remove('landing-active');
+    }
+
     screens.forEach(screen => {
       if (screen === targetScreen) {
         screen.classList.remove('hidden');
@@ -54,12 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
     clientId = urlParams.get('client');
 
     if (!clientId) {
-      // Missing client parameter
-      showErrorState(
-        'Brak parametru klienta',
-        'Aby przejść do ankiety, musisz otworzyć poprawny kod QR lub link zawierający identyfikator firmy.',
-        true
-      );
+      // Show main product landing page instead of error
+      showScreen(screenLanding);
       return;
     }
 
@@ -273,6 +283,52 @@ document.addEventListener('DOMContentLoaded', () => {
       submitLoader.classList.add('hidden');
     }
   });
+
+  // --- Landing Contact Form Submission ---
+  if (landingContactForm) {
+    landingContactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      landingEmailError.textContent = '';
+      landingEmail.style.borderColor = '';
+
+      const emailVal = landingEmail.value.trim();
+      if (!emailVal) {
+        landingEmailError.textContent = 'Adres e-mail jest wymagany.';
+        landingEmail.style.borderColor = 'var(--accent-red)';
+        return;
+      }
+
+      // Simple email validation regex
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailVal)) {
+        landingEmailError.textContent = 'Niepoprawny format adresu e-mail.';
+        landingEmail.style.borderColor = 'var(--accent-red)';
+        return;
+      }
+
+      // High-fidelity UI flow: show success state client-side
+      landingContactForm.classList.add('hidden');
+      landingContactSuccess.classList.remove('hidden');
+
+      // Post this lead to our backend to store in Google Sheet/CSV!
+      try {
+        await fetch('/api/feedback', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            client_id: 'LANDING_PAGE_LEAD',
+            rating: 5,
+            message: `Zapytanie o darmowy test 14-dniowy od: ${emailVal}`,
+            phone: ''
+          })
+        });
+      } catch (err) {
+        console.error('Lead post failed:', err);
+      }
+    });
+  }
 
   // Start initialization
   init();
