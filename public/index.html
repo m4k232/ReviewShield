@@ -13,11 +13,19 @@
 <body>
   <main id="app-container">
     
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+      <button type="button" class="lang-btn active" data-lang="pl" aria-label="Polski">🇵🇱</button>
+      <button type="button" class="lang-btn" data-lang="en" aria-label="English">🇬🇧</button>
+      <button type="button" class="lang-btn" data-lang="uk" aria-label="Українська">🇺🇦</button>
+      <button type="button" class="lang-btn" data-lang="ru" aria-label="Русский">🇷🇺</button>
+    </div>
+
     <!-- Loading Spinner Screen -->
     <section id="screen-loading" class="screen-view">
       <div class="spinner-container">
         <div class="spinner"></div>
-        <p class="loading-text">Wczytywanie...</p>
+        <p class="loading-text" data-i18n="loading">Wczytywanie...</p>
       </div>
     </section>
 
@@ -25,10 +33,10 @@
     <section id="screen-error" class="screen-view hidden" hidden>
       <div class="card error-card">
         <div class="error-icon">⚠️</div>
-        <h1 id="error-title" class="title">Brak dostępu</h1>
-        <p id="error-desc" class="description">Ten link jest nieaktywny lub niepoprawny. Skontaktuj się z administratorem systemu.</p>
+        <h1 id="error-title" class="title" data-i18n="errorTitle">Brak dostępu</h1>
+        <p id="error-desc" class="description" data-i18n="errorDesc">Ten link jest nieaktywny lub niepoprawny. Skontaktuj się z administratorem systemu.</p>
         <div id="demo-selector-container" class="hidden">
-          <p class="demo-label">Wybierz wersję demonstracyjną:</p>
+          <p class="demo-label" data-i18n="demoLabel">Wybierz wersję demonstracyjną:</p>
           <div class="demo-buttons">
             <a href="?client=barber_warszawa" class="btn btn-secondary">Barber Warszawa</a>
             <a href="?client=pizza_krakow" class="btn btn-secondary">Pizza Kraków</a>
@@ -110,7 +118,7 @@
           <h2 id="client-name" class="client-name">Sklep</h2>
         </div>
         
-        <h1 class="question-title">Jak oceniasz naszą obsługę dzisiaj?</h1>
+        <h1 class="question-title" data-i18n="ratingQuestion">Jak oceniasz naszą obsługę dzisiaj?</h1>
         
         <div class="star-rating-container" id="stars-container" role="radiogroup" aria-label="Ocena w skali od 1 do 5 gwiazdek">
           <button type="button" class="star-btn" data-value="1" aria-label="1 gwiazdka" role="radio" aria-checked="false">
@@ -140,7 +148,7 @@
           </button>
         </div>
         
-        <p class="rating-subtext">Wybierz od 1 do 5 gwiazdek, aby kontynuować</p>
+        <p class="rating-subtext" data-i18n="ratingSubtext">Wybierz od 1 do 5 gwiazdek, aby kontynuować</p>
       </div>
     </section>
 
@@ -151,27 +159,27 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
-          <span>Wróć</span>
+          <span data-i18n="btnBack">Wróć</span>
         </button>
 
-        <h1 class="feedback-title">Przykro nam!</h1>
-        <p class="feedback-desc">Napisz, co poszło nie tak. Twój feedback trafi bezpośrednio do właściciela.</p>
+        <h1 class="feedback-title" data-i18n="feedbackTitle">Przykro nam!</h1>
+        <p class="feedback-desc" data-i18n="feedbackDesc">Napisz, co poszło nie tak. Twój feedback trafi bezpośrednio do właściciela.</p>
 
         <form id="feedback-form" novalidate>
           <div class="input-group">
-            <label for="feedback-message" class="input-label">Twoja opinia <span class="required">*</span></label>
-            <textarea id="feedback-message" name="message" class="form-input" rows="4" placeholder="Opisz swoje doświadczenia... np. długi czas oczekiwania, zimne jedzenie" required></textarea>
+            <label for="feedback-message" class="input-label"><span data-i18n="feedbackLabel">Twoja opinia</span> <span class="required">*</span></label>
+            <textarea id="feedback-message" name="message" class="form-input" rows="4" placeholder="Opisz swoje doświadczenia... np. długi czas oczekiwania, zimne jedzenie" data-i18n-placeholder="feedbackPlaceholder" required></textarea>
             <span class="error-msg" id="message-error"></span>
           </div>
 
           <div class="input-group">
-            <label for="feedback-phone" class="input-label">Numer telefonu (opcjonalnie)</label>
+            <label for="feedback-phone" class="input-label" data-i18n="phoneLabel">Numer telefonu (opcjonalnie)</label>
             <input type="tel" id="feedback-phone" name="phone" class="form-input" placeholder="+48 123 456 789" />
             <span class="error-msg" id="phone-error"></span>
           </div>
 
           <button type="submit" id="submit-btn" class="btn btn-primary">
-            <span class="btn-text">Wyślij zgłoszenie</span>
+            <span class="btn-text" data-i18n="submitBtn">Wyślij zgłoszenie</span>
             <span class="btn-loader hidden"></span>
           </button>
         </form>
@@ -187,9 +195,9 @@
             <path class="checkmark-check" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
           </svg>
         </div>
-        <h1 class="title">Dziękujemy!</h1>
-        <p class="description">Twój feedback został przekazany bezpośrednio do właściciela. Doceniamy Twoją szczerość i dołożymy starań, aby ulepszyć nasze usługi.</p>
-        <button type="button" id="btn-restart" class="btn btn-secondary">Zakończ</button>
+        <h1 class="title" data-i18n="successTitle">Dziękujemy!</h1>
+        <p class="description" data-i18n="successDesc">Twój feedback został przekazany bezpośrednio do właściciela. Doceniamy Twoją szczerość i dołożymy starań, aby ulepszyć nasze usługi.</p>
+        <button type="button" id="btn-restart" class="btn btn-secondary" data-i18n="btnRestart">Zakończ</button>
       </div>
     </section>
 

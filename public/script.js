@@ -1,4 +1,102 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // --- Translations (i18n) ---
+  const translations = {
+    pl: {
+      loading: "Wczytywanie...",
+      errorTitle: "Brak dostępu",
+      errorDesc: "Ten link jest nieaktywny lub niepoprawny. Skontaktuj się z administratorem systemu.",
+      demoLabel: "Wybierz wersję demonstracyjną:",
+      landingHeroTitle: "Chroń oceny w Google Maps i zatrzymaj negatywne opinie",
+      landingHeroSub: "Inteligentny system filtracji opinii za pomocą kodów QR dla restauracji, salonów urody, barberów i auto-detailingów.",
+      ratingQuestion: "Jak oceniasz naszą obsługę dzisiaj?",
+      ratingSubtext: "Wybierz od 1 do 5 gwiazdek, aby kontynuować",
+      btnBack: "Wróć",
+      feedbackTitle: "Przykro nam!",
+      feedbackDesc: "Napisz, co poszło nie tak. Twój feedback trafi bezpośrednio do właściciela.",
+      feedbackLabel: "Twoja opinia",
+      feedbackPlaceholder: "Opisz swoje doświadczenia... np. długi czas oczekiwania, zimne jedzenie",
+      phoneLabel: "Numer telefonu (opcjonalnie)",
+      submitBtn: "Wyślij zgłoszenie",
+      successTitle: "Dziękujemy!",
+      successDesc: "Twój feedback został przekazany bezpośrednio do właściciela. Doceniamy Twoją szczerość i dołożymy starań, aby ulepszyć nasze usługi.",
+      btnRestart: "Zakończ",
+      errorFeedbackEmpty: "Treść opinii jest wymagana.",
+      errorFeedbackShort: "Proszę napisać dłuższą opinię (minimum 5 znaków).",
+      errorPhone: "Niepoprawny format numeru telefonu."
+    },
+    en: {
+      loading: "Loading...",
+      errorTitle: "Access Denied",
+      errorDesc: "This link is inactive or invalid. Please contact the system administrator.",
+      demoLabel: "Select a demo version:",
+      landingHeroTitle: "Protect your Google Maps ratings and intercept negative reviews",
+      landingHeroSub: "Smart QR code feedback filtering system for restaurants, beauty salons, barbers, and auto-detailing.",
+      ratingQuestion: "How do you rate our service today?",
+      ratingSubtext: "Select from 1 to 5 stars to continue",
+      btnBack: "Back",
+      feedbackTitle: "We are sorry!",
+      feedbackDesc: "Tell us what went wrong. Your feedback will go directly to the owner.",
+      feedbackLabel: "Your feedback",
+      feedbackPlaceholder: "Describe your experience... e.g., long wait time, cold food",
+      phoneLabel: "Phone number (optional)",
+      submitBtn: "Send feedback",
+      successTitle: "Thank you!",
+      successDesc: "Your feedback has been sent directly to the owner. We appreciate your honesty and will strive to improve our services.",
+      btnRestart: "Finish",
+      errorFeedbackEmpty: "Feedback content is required.",
+      errorFeedbackShort: "Please write a longer feedback (minimum 5 characters).",
+      errorPhone: "Invalid phone number format."
+    },
+    uk: {
+      loading: "Завантаження...",
+      errorTitle: "Немає доступу",
+      errorDesc: "Це посилання неактивне або недійсне. Будь ласка, зв'яжіться з адміністратором.",
+      demoLabel: "Виберіть демо-версію:",
+      landingHeroTitle: "Захистіть свої оцінки в Google Maps і перехопіть негативні відгуки",
+      landingHeroSub: "Розумна система фільтрації відгуків за QR-кодом для ресторанів, салонів краси, барбершопів та автодетейлінгу.",
+      ratingQuestion: "Як ви оцінюєте наше обслуговування сьогодні?",
+      ratingSubtext: "Виберіть від 1 до 5 зірок, щоб продовжити",
+      btnBack: "Назад",
+      feedbackTitle: "Нам шкода!",
+      feedbackDesc: "Напишіть, що пішло не так. Ваш відгук потрапить безпосередньо до власника.",
+      feedbackLabel: "Ваш відгук",
+      feedbackPlaceholder: "Опишіть свій досвід... наприклад, довге очікування, холодна їжа",
+      phoneLabel: "Номер телефону (необов'язково)",
+      submitBtn: "Надіслати відгук",
+      successTitle: "Дякуємо!",
+      successDesc: "Ваш відгук передано безпосередньо власнику. Ми цінуємо вашу відвертість і докладемо зусиль, щоб покращити наші послуги.",
+      btnRestart: "Завершити",
+      errorFeedbackEmpty: "Текст відгуку обов'язковий.",
+      errorFeedbackShort: "Будь ласка, напишіть довший відгук (мінімум 5 символів).",
+      errorPhone: "Неправильний формат номеру телефону."
+    },
+    ru: {
+      loading: "Загрузка...",
+      errorTitle: "Нет доступа",
+      errorDesc: "Эта ссылка неактивна или недействительна. Пожалуйста, свяжитесь с администратором.",
+      demoLabel: "Выберите демо-версию:",
+      landingHeroTitle: "Защитите свои оценки в Google Maps и перехватите негативные отзывы",
+      landingHeroSub: "Умная система фильтрации отзывов по QR-коду для ресторанов, салонов красоты, барбершопов и автодетейлинга.",
+      ratingQuestion: "Как вы оцениваете наше обслуживание сегодня?",
+      ratingSubtext: "Выберите от 1 до 5 звезд, чтобы продолжить",
+      btnBack: "Назад",
+      feedbackTitle: "Нам жаль!",
+      feedbackDesc: "Напишите, что пошло не так. Ваш отзыв попадет напрямую к владельцу.",
+      feedbackLabel: "Ваш отзыв",
+      feedbackPlaceholder: "Опишите свой опыт... например, долгое ожидание, холодная еда",
+      phoneLabel: "Номер телефону (необязательно)",
+      submitBtn: "Отправить отзыв",
+      successTitle: "Спасибо!",
+      successDesc: "Ваш отзыв передан напрямую владельцу. Мы ценим вашу откровенность и постараемся улучшить наши услуги.",
+      btnRestart: "Завершить",
+      errorFeedbackEmpty: "Текст отзыва обязателен.",
+      errorFeedbackShort: "Пожалуйста, напишите более длинный отзыв (минимум 5 символов).",
+      errorPhone: "Неправильный формат номера телефона."
+    }
+  };
+
+  let currentLang = 'pl'; // Default language
+
   // --- DOM Elements ---
   const appContainer = document.getElementById('app-container');
   const screenLoading = document.getElementById('screen-loading');
@@ -32,6 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const landingEmail = document.getElementById('landing-email');
   const landingEmailError = document.getElementById('landing-email-error');
   const landingContactSuccess = document.getElementById('landing-contact-success');
+  
+  const langButtons = document.querySelectorAll('.lang-btn');
 
   // --- State Variables ---
   let clientId = '';
@@ -61,8 +161,66 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- i18n Functions ---
+  function setLanguage(lang) {
+    if (!translations[lang]) return;
+    currentLang = lang;
+    
+    // Update active button
+    langButtons.forEach(btn => {
+      if (btn.getAttribute('data-lang') === lang) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    // Update text content
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[lang][key]) {
+        el.textContent = translations[lang][key];
+      }
+    });
+
+    // Update placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (translations[lang][key]) {
+        el.placeholder = translations[lang][key];
+      }
+    });
+    
+    // Refresh error messages if currently displayed
+    if (messageError.textContent) {
+      if (feedbackMessage.value.trim().length === 0) {
+        messageError.textContent = translations[lang].errorFeedbackEmpty;
+      } else if (feedbackMessage.value.trim().length < 5) {
+        messageError.textContent = translations[lang].errorFeedbackShort;
+      }
+    }
+    if (phoneError.textContent) {
+       phoneError.textContent = translations[lang].errorPhone;
+    }
+  }
+
+  // Setup language listeners
+  langButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lang = btn.getAttribute('data-lang');
+      setLanguage(lang);
+    });
+  });
+
   // --- Initialize App ---
   async function init() {
+    // Detect browser language
+    const browserLang = navigator.language || navigator.userLanguage || '';
+    if (browserLang.startsWith('en')) setLanguage('en');
+    else if (browserLang.startsWith('uk')) setLanguage('uk');
+    else if (browserLang.startsWith('ru') || browserLang.startsWith('be')) setLanguage('ru');
+    else setLanguage('pl');
+
     // 1. Parse query params
     const urlParams = new URLSearchParams(window.location.search);
     clientId = urlParams.get('client');
@@ -215,11 +373,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Validate message
     const messageVal = feedbackMessage.value.trim();
     if (!messageVal) {
-      messageError.textContent = 'Treść opinii jest wymagana.';
+      messageError.textContent = translations[currentLang].errorFeedbackEmpty;
       feedbackMessage.style.borderColor = 'var(--accent-red)';
       isValid = false;
     } else if (messageVal.length < 5) {
-      messageError.textContent = 'Proszę napisać dłuższą opinię (minimum 5 znaków).';
+      messageError.textContent = translations[currentLang].errorFeedbackShort;
       feedbackMessage.style.borderColor = 'var(--accent-red)';
       isValid = false;
     }
@@ -230,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Basic phone pattern check (allows spaces, +, digits, min length 9)
       const phoneRegex = /^[+]?[0-9\s-]{9,20}$/;
       if (!phoneRegex.test(phoneVal)) {
-        phoneError.textContent = 'Niepoprawny format numeru telefonu.';
+        phoneError.textContent = translations[currentLang].errorPhone;
         feedbackPhone.style.borderColor = 'var(--accent-red)';
         isValid = false;
       }
