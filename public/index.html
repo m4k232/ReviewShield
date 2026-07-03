@@ -61,18 +61,18 @@
         <div class="landing-steps">
           <div class="step-card">
             <span class="step-num">1</span>
-            <h3>Skanowanie QR</h3>
-            <p class="step-p">Klient skanuje kod QR znajdujący się na stoliku, recepcji lub przy rachunku.</p>
+            <h3 data-i18n="step1Title">Skanowanie QR</h3>
+            <p class="step-p" data-i18n="step1Desc">Klient skanuje kod QR znajdujący się na stoliku, recepcji lub przy rachunku.</p>
           </div>
           <div class="step-card">
             <span class="step-num">2</span>
-            <h3>Inteligentny filtr</h3>
-            <p class="step-p">Zadowoleni goście (4-5★) idą pisać opinię w Google. Niezadowoleni (1-3★) trafiają do prywatnego formularza.</p>
+            <h3 data-i18n="step2Title">Inteligentny filtr</h3>
+            <p class="step-p" data-i18n="step2Desc">Zadowoleni goście (4-5★) idą pisać opinię w Google. Niezadowoleni (1-3★) trafiają do prywatnego formularza.</p>
           </div>
           <div class="step-card">
             <span class="step-num">3</span>
-            <h3>Wzrost ocen</h3>
-            <p class="step-p">Unikasz publicznych 1-gwiazdkowych ocen w Google, dostając szansę na rozwiązanie problemu klienta prywatnie.</p>
+            <h3 data-i18n="step3Title">Wzrost ocen</h3>
+            <p class="step-p" data-i18n="step3Desc">Unikasz publicznych 1-gwiazdkowych ocen w Google, dostając szansę na rozwiązanie problemu klienta prywatnie.</p>
           </div>
         </div>
 
@@ -86,24 +86,28 @@
 
         <div class="landing-pricing">
           <div class="pricing-card">
-            <span class="pricing-badge">Złoty pakiet</span>
-            <h3>Abonament</h3>
-            <div class="price">99 zł<span> / miesięcznie</span></div>
-            <p class="pricing-desc">Pierwsze 14 dni całkowicie za darmo. My dostarczamy spersonalizowany kod QR i wsparcie.</p>
+            <span class="pricing-badge" data-i18n="pricingBadge">Złoty pakiet</span>
+            <h3 data-i18n="pricingTitle">Abonament</h3>
+            <div class="price"><span data-i18n="pricingPrice">99 zł</span><span data-i18n="pricingPeriod"> / miesięcznie</span></div>
+            <p class="pricing-desc" data-i18n="pricingDesc">Pierwsze 14 dni całkowicie za darmo. My dostarczamy spersonalizowany kod QR i wsparcie.</p>
           </div>
         </div>
 
         <div class="landing-contact">
-          <h3>Zamów darmowy test na 14 dni</h3>
-          <p class="contact-desc">Wpisz swój e-mail, a przygotujemy dedykowany system QR pod Twoje zbiory opinii.</p>
+          <h3 data-i18n="contactTitle">Zamów darmowy test na 14 dni</h3>
+          <p class="contact-desc" data-i18n="contactDesc">Wpisz swój e-mail, a przygotujemy dedykowany system QR pod Twoje zbiory opinii.</p>
           <form id="landing-contact-form" novalidate>
             <div class="input-group">
-              <input type="email" id="landing-email" class="form-input" placeholder="Twój e-mail..." required />
+              <label for="landing-email" class="input-label" data-i18n="emailLabel">Adres e-mail</label>
+              <input type="email" id="landing-email" class="form-input" placeholder="Twój adres e-mail (np. kontakt@firma.pl)" data-i18n-placeholder="emailPlaceholder" required />
               <span class="error-msg" id="landing-email-error"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Chcę darmowy test</button>
+            <button type="submit" class="btn btn-primary" id="landing-submit-btn">
+              <span class="btn-text" data-i18n="contactSubmitBtn">Odbierz 14 dni za darmo</span>
+              <span class="btn-loader hidden"></span>
+            </button>
           </form>
-          <div id="landing-contact-success" class="hidden text-success">
+          <div id="landing-contact-success" class="hidden text-success" data-i18n="contactSuccess">
             Dziękujemy! Skontaktujemy się z Tobą w ciągu 24 godzin.
           </div>
         </div>
