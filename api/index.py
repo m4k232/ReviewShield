@@ -81,6 +81,7 @@ class handler(BaseHTTPRequestHandler):
         rating = data.get('rating')
         message = data.get('message')
         phone = data.get('phone', '')
+        recaptcha_token = data.get('recaptcha_token', '')
         
         if not client_id or rating is None or not message:
             self._send_json(400, {
@@ -88,6 +89,36 @@ class handler(BaseHTTPRequestHandler):
                 "message": "Missing required fields: client_id, rating, message"
             })
             return
+
+        # Verify reCAPTCHA
+        recaptcha_secret = os.environ.get("RECAPTCHA_SECRET")
+        if recaptcha_secret:
+            if not recaptcha_token:
+                self._send_json(403, {
+                    "status": "error",
+                    "message": "Missing reCAPTCHA token"
+                })
+                return
+            
+            verify_url = "https://www.google.com/recaptcha/api/siteverify"
+            payload = urllib.parse.urlencode({
+                "secret": recaptcha_secret,
+                "response": recaptcha_token
+            }).encode('utf-8')
+            
+            try:
+                req = urllib.request.Request(verify_url, data=payload, method="POST")
+                with urllib.request.urlopen(req, timeout=5) as response:
+                    res_body = response.read().decode("utf-8")
+                    verify_result = json.loads(res_body)
+                    if not verify_result.get("success") or verify_result.get("score", 1.0) < 0.5:
+                        self._send_json(403, {
+                            "status": "error",
+                            "message": "Bot verification failed (low score or invalid token)"
+                        })
+                        return
+            except Exception as e:
+                print(f"[WARNING] reCAPTCHA verification failed network call: {e}")
             
         try:
             rating_val = int(rating)
