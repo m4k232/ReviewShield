@@ -342,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       // 2. Fetch clients configuration
-      const response = await fetch('/clients.json');
+      const response = await fetch('/clients.json?v=1.1');
       if (!response.ok) {
         throw new Error('Failed to load clients database');
       }
