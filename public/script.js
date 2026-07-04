@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorFeedbackEmpty: "Treść opinii jest wymagana.",
       errorFeedbackShort: "Proszę napisać dłuższą opinię (minimum 5 znaków).",
       errorPhone: "Niepoprawny format numeru telefonu.",
-      redirecting: "Przekierowywanie do Google Maps..."
+      redirecting: "Przekierowywanie do Google Maps...",
+      errorRateLimit: "Przekroczono limit wysłanych opinii. Spróbuj ponownie później."
     },
     en: {
       loading: "Loading...",
@@ -81,7 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorFeedbackEmpty: "Feedback content is required.",
       errorFeedbackShort: "Please write a longer feedback (minimum 5 characters).",
       errorPhone: "Invalid phone number format.",
-      redirecting: "Redirecting to Google Maps..."
+      redirecting: "Redirecting to Google Maps...",
+      errorRateLimit: "Review submission limit exceeded. Please try again later."
     },
     uk: {
       loading: "Завантаження...",
@@ -122,7 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorFeedbackEmpty: "Текст відгуку обов'язковий.",
       errorFeedbackShort: "Будь ласка, напишіть довший відгук (мінімум 5 символів).",
       errorPhone: "Неправильний формат номеру телефону.",
-      redirecting: "Перенаправлення на Google Maps..."
+      redirecting: "Перенаправлення на Google Maps...",
+      errorRateLimit: "Перевищено ліміт відправки відгуків. Спробуйте пізніше."
     },
     ru: {
       loading: "Загрузка...",
@@ -163,7 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorFeedbackEmpty: "Текст отзыва обязателен.",
       errorFeedbackShort: "Пожалуйста, напишите более длинный отзыв (минимум 5 символов).",
       errorPhone: "Неправильный формат номера телефона.",
-      redirecting: "Перенаправление на Google Maps..."
+      redirecting: "Перенаправление на Google Maps...",
+      errorRateLimit: "Превышен лимит отправки отзывов. Попробуйте позже."
     }
   };
 
@@ -531,6 +535,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!isValid) return;
 
+    // --- Rate Limiting Check ---
+    const MAX_REVIEWS_PER_HOUR = 3;
+    const ONE_HOUR = 60 * 60 * 1000;
+    const now = Date.now();
+    let reviewTimestamps = JSON.parse(localStorage.getItem('review_timestamps') || '[]');
+    
+    // Filter out old timestamps
+    reviewTimestamps = reviewTimestamps.filter(ts => now - ts < ONE_HOUR);
+    
+    if (reviewTimestamps.length >= MAX_REVIEWS_PER_HOUR) {
+      messageError.textContent = translations[currentLang].errorRateLimit;
+      return;
+    }
+
     // Set UI submitting state
     const submitText = submitBtn.querySelector('.btn-text');
     const submitLoader = submitBtn.querySelector('.btn-loader');
@@ -540,11 +558,23 @@ document.addEventListener('DOMContentLoaded', () => {
     submitLoader.classList.remove('hidden');
 
     try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await new Promise((resolve) => {
+        if (typeof grecaptcha !== 'undefined') {
+          grecaptcha.ready(() => {
+            grecaptcha.execute('6LcvmUQtAAAAAC_GbgWPjPy7M6p3SNOhoIo3k1es', {action: 'submit'}).then(resolve);
+          });
+        } else {
+          resolve(null); // Fallback if script didn't load
+        }
+      });
+
       const payload = {
         client_id: clientId,
         rating: selectedRating,
         message: messageVal,
-        phone: phoneVal || ''
+        phone: phoneVal || '',
+        recaptcha_token: recaptchaToken
       };
 
       const response = await fetch('/api/feedback', {
@@ -560,6 +590,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) {
         throw new Error(result.message || 'Server error');
       }
+
+      // Save successful submission timestamp for rate limiting
+      reviewTimestamps.push(now);
+      localStorage.setItem('review_timestamps', JSON.stringify(reviewTimestamps));
 
       // Transition to Screen 3 (Success)
       showScreen(screenSuccess);
