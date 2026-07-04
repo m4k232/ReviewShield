@@ -39,7 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
       btnRestart: "Zakończ",
       errorFeedbackEmpty: "Treść opinii jest wymagana.",
       errorFeedbackShort: "Proszę napisać dłuższą opinię (minimum 5 znaków).",
-      errorPhone: "Niepoprawny format numeru telefonu."
+      errorPhone: "Niepoprawny format numeru telefonu.",
+      redirecting: "Przekierowywanie do Google Maps..."
     },
     en: {
       loading: "Loading...",
@@ -79,7 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
       btnRestart: "Finish",
       errorFeedbackEmpty: "Feedback content is required.",
       errorFeedbackShort: "Please write a longer feedback (minimum 5 characters).",
-      errorPhone: "Invalid phone number format."
+      errorPhone: "Invalid phone number format.",
+      redirecting: "Redirecting to Google Maps..."
     },
     uk: {
       loading: "Завантаження...",
@@ -119,7 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
       btnRestart: "Завершити",
       errorFeedbackEmpty: "Текст відгуку обов'язковий.",
       errorFeedbackShort: "Будь ласка, напишіть довший відгук (мінімум 5 символів).",
-      errorPhone: "Неправильний формат номеру телефону."
+      errorPhone: "Неправильний формат номеру телефону.",
+      redirecting: "Перенаправлення на Google Maps..."
     },
     ru: {
       loading: "Загрузка...",
@@ -159,7 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
       btnRestart: "Завершить",
       errorFeedbackEmpty: "Текст отзыва обязателен.",
       errorFeedbackShort: "Пожалуйста, напишите более длинный отзыв (минимум 5 символов).",
-      errorPhone: "Неправильный формат номера телефона."
+      errorPhone: "Неправильный формат номера телефона.",
+      redirecting: "Перенаправление на Google Maps..."
     }
   };
 
@@ -427,17 +431,39 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle star selection click
   starButtons.forEach(btn => {
     btn.addEventListener('click', () => {
+      // Add pop animation
+      btn.classList.add('pop');
+      setTimeout(() => btn.classList.remove('pop'), 300);
+
       const rating = parseInt(btn.getAttribute('data-value'), 10);
       selectedRating = rating;
       renderStars(selectedRating, 'active');
 
       if (rating >= 4) {
-        // 4 or 5 stars -> instantly redirect
-        if (clientConfig && clientConfig.googleMapsUrl) {
-          window.location.href = clientConfig.googleMapsUrl;
-        } else {
-          alert('Błąd przekierowania: brak skonfigurowanego linku Google Maps.');
+        // Trigger Confetti Animation
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#FFD700', '#FFA500', '#FF8C00']
+          });
         }
+
+        // Change Title to Loading
+        const titleElement = document.getElementById('step1-title');
+        const descElement = document.getElementById('step1-desc');
+        if (titleElement) titleElement.textContent = translations[currentLang].thankYou;
+        if (descElement) descElement.textContent = translations[currentLang].redirecting;
+
+        // 4 or 5 stars -> Redirect after delay for animation
+        setTimeout(() => {
+          if (clientConfig && clientConfig.googleMapsUrl) {
+            window.location.href = clientConfig.googleMapsUrl;
+          } else {
+            alert('Błąd przekierowania: brak skonfigurowanego linku Google Maps.');
+          }
+        }, 1500);
       } else {
         // 1, 2 or 3 stars -> show negative feedback form
         // Transition to Screen 2
