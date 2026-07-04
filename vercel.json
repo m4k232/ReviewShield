@@ -1,6 +1,7 @@
 {
   "routes": [
     { "src": "/api/feedback", "dest": "/api/index.py" },
+    { "src": "/api/format_sheet", "dest": "/api/index.py" },
     { "src": "/style.css", "dest": "/style.css" },
     { "src": "/script.js", "dest": "/script.js" },
     { "src": "/clients.json", "dest": "/clients.json" },
