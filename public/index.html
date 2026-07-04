@@ -14,11 +14,17 @@
   <main id="app-container">
     
     <!-- Language Switcher -->
-    <div class="lang-switcher">
-      <button type="button" class="lang-btn active" data-lang="pl" aria-label="Polski">🇵🇱</button>
-      <button type="button" class="lang-btn" data-lang="en" aria-label="English">🇬🇧</button>
-      <button type="button" class="lang-btn" data-lang="uk" aria-label="Українська">🇺🇦</button>
-      <button type="button" class="lang-btn" data-lang="ru" aria-label="Русский">🇷🇺</button>
+    <!-- Language Switcher Dropdown -->
+    <div class="lang-dropdown">
+      <button type="button" class="dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Zmień język">
+        <span class="active-flag">🇵🇱</span> <span class="active-label">PL</span> <span class="arrow">▾</span>
+      </button>
+      <div class="dropdown-menu hidden" id="lang-dropdown-menu" role="listbox">
+        <button type="button" class="lang-btn active" data-lang="pl" role="option" aria-selected="true">🇵🇱 PL</button>
+        <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">🇬🇧 EN</button>
+        <button type="button" class="lang-btn" data-lang="uk" role="option" aria-selected="false">🇺🇦 UA</button>
+        <button type="button" class="lang-btn" data-lang="ru" role="option" aria-selected="false">🇷🇺 RU</button>
+      </div>
     </div>
 
     <!-- Loading Spinner Screen -->

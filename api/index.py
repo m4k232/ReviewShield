@@ -1,6 +1,8 @@
 import json
 import os
 import csv
+import urllib.request
+import urllib.parse
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler
 
@@ -103,6 +105,22 @@ class handler(BaseHTTPRequestHandler):
         # 5. Save feedback data
         try:
             save_method = self._save_feedback(timestamp, client_id, rating_val, message, phone)
+            
+            # Send Telegram notification for landing page leads
+            if client_id == 'LANDING_PAGE_LEAD':
+                email = message
+                if "od: " in message:
+                    email = message.split("od: ")[-1]
+                elif "от: " in message:
+                    email = message.split("от: ")[-1]
+                
+                tg_message = (
+                    "<b>🚀 Новая заявка на тест 14 дней!</b>\n\n"
+                    f"📧 <b>Email:</b> <code>{email}</code>\n"
+                    f"⏰ <b>Время:</b> {timestamp}"
+                )
+                self._send_telegram_notification(tg_message)
+
             self._send_json(200, {
                 "status": "success",
                 "message": "Feedback submitted successfully",
@@ -132,11 +150,39 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
 
+    def _send_telegram_notification(self, message_text):
+        bot_token = os.environ.get("TELEGRAM_BOT_TOKEN")
+        chat_id = os.environ.get("TELEGRAM_ADMIN_CHAT_ID")
+        if not bot_token or not chat_id:
+            print("[WARNING] Telegram credentials missing, skipping notification.")
+            return False
+            
+        url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+        payload = {
+            "chat_id": chat_id,
+            "text": message_text,
+            "parse_mode": "HTML"
+        }
+        
+        try:
+            data = urllib.parse.urlencode(payload).encode("utf-8")
+            req = urllib.request.Request(url, data=data, method="POST")
+            with urllib.request.urlopen(req, timeout=5) as response:
+                res_body = response.read().decode("utf-8")
+                print(f"[INFO] Telegram notification sent: {res_body}")
+                return True
+        except Exception as e:
+            print(f"[ERROR] Failed to send Telegram notification: {e}")
+            return False
+
     def _save_feedback(self, timestamp, client_id, rating, message, phone):
         creds_json = os.environ.get("GOOGLE_SHEETS_CREDENTIALS")
         spreadsheet_id = os.environ.get("GOOGLE_SPREADSHEET_ID")
         sheet_name = os.environ.get("GOOGLE_SHEET_NAME", "")
         
+        is_lead = (client_id == 'LANDING_PAGE_LEAD')
+        target_sheet = "Leads" if is_lead else sheet_name
+
         # If env variables are present, authenticate and write to Google Sheets
         if creds_json and spreadsheet_id:
             try:
@@ -156,10 +202,25 @@ class handler(BaseHTTPRequestHandler):
                 
                 # Open spreadsheet
                 sh = gc.open_by_key(spreadsheet_id)
-                if sheet_name:
-                    worksheet = sh.worksheet(sheet_name)
+                
+                worksheet = None
+                if target_sheet:
+                    try:
+                        worksheet = sh.worksheet(target_sheet)
+                    except Exception:
+                        if is_lead:
+                            # Dynamic sheet creation if Leads is missing
+                            try:
+                                worksheet = sh.add_worksheet(title="Leads", rows="1000", cols="6")
+                                worksheet.append_row(["Timestamp", "Client ID", "Rating", "Message", "Phone Number", "Status"])
+                            except Exception as create_err:
+                                print(f"[WARNING] Failed to create Leads sheet: {create_err}")
+                                worksheet = sh.get_worksheet(0)
+                        else:
+                            worksheet = sh.get_worksheet(0)
                 else:
                     worksheet = sh.get_worksheet(0)
+
                     
                 # Append feedback row
                 # Columns: Timestamp | Client ID | Rating | Message | Phone Number | Status (New)
@@ -172,7 +233,7 @@ class handler(BaseHTTPRequestHandler):
                 raise RuntimeError(f"Google Sheets error: {str(e)}")
         else:
             # Fallback to local CSV (useful for local development and testing)
-            csv_path = "/tmp/reviewshield_feedback.csv"
+            csv_path = "/tmp/reviewshield_leads.csv" if is_lead else "/tmp/reviewshield_feedback.csv"
             file_exists = os.path.exists(csv_path)
             
             with open(csv_path, mode="a", newline="", encoding="utf-8") as f:

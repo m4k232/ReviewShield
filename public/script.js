@@ -238,10 +238,22 @@ document.addEventListener('DOMContentLoaded', () => {
     langButtons.forEach(btn => {
       if (btn.getAttribute('data-lang') === lang) {
         btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
       } else {
         btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
       }
     });
+
+    // Update trigger UI
+    const trigger = document.getElementById('lang-dropdown-trigger');
+    if (trigger) {
+      const activeFlag = trigger.querySelector('.active-flag');
+      const activeLabel = trigger.querySelector('.active-label');
+      const flagMap = { pl: '🇵🇱', en: '🇬🇧', uk: '🇺🇦', ru: '🇷🇺' };
+      if (activeFlag) activeFlag.textContent = flagMap[lang] || '🇵🇱';
+      if (activeLabel) activeLabel.textContent = lang.toUpperCase();
+    }
 
     // Update text content
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -272,11 +284,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // --- Language Switcher Dropdown JS ---
+  const langDropdownTrigger = document.getElementById('lang-dropdown-trigger');
+  const langDropdownMenu = document.getElementById('lang-dropdown-menu');
+
+  if (langDropdownTrigger && langDropdownMenu) {
+    langDropdownTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isExpanded = langDropdownTrigger.getAttribute('aria-expanded') === 'true';
+      langDropdownTrigger.setAttribute('aria-expanded', !isExpanded);
+      langDropdownTrigger.classList.toggle('active', !isExpanded);
+      langDropdownMenu.classList.toggle('hidden', isExpanded);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!langDropdownTrigger.contains(e.target)) {
+        langDropdownTrigger.setAttribute('aria-expanded', 'false');
+        langDropdownTrigger.classList.remove('active');
+        langDropdownMenu.classList.add('hidden');
+      }
+    });
+  }
+
   // Setup language listeners
   langButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const lang = btn.getAttribute('data-lang');
       setLanguage(lang);
+      
+      // Close dropdown after selection
+      if (langDropdownTrigger && langDropdownMenu) {
+        langDropdownTrigger.setAttribute('aria-expanded', 'false');
+        langDropdownTrigger.classList.remove('active');
+        langDropdownMenu.classList.add('hidden');
+      }
     });
   });
 
