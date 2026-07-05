@@ -423,6 +423,21 @@ class handler(BaseHTTPRequestHandler):
         sheet_name = os.environ.get("GOOGLE_SHEET_NAME", "")
         
         is_lead = (client_id == 'LANDING_PAGE_LEAD')
+        
+        # Load custom spreadsheet ID from Firestore if present
+        if not is_lead:
+            try:
+                db = get_firestore_client()
+                client_doc = db.collection('clients').document(client_id).get()
+                if client_doc.exists:
+                    client_data = client_doc.to_dict()
+                    custom_sid = client_data.get("spreadsheetId")
+                    if custom_sid:
+                        spreadsheet_id = custom_sid
+                        print(f"[INFO] Using custom spreadsheet ID from Firestore for client {client_id}: {spreadsheet_id}")
+            except Exception as fe:
+                print(f"[WARNING] Failed to load custom spreadsheet ID from Firestore: {fe}")
+        
         target_sheet = "Leads" if is_lead else sheet_name
         
         if creds_json and spreadsheet_id:
