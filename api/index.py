@@ -66,12 +66,17 @@ class handler(BaseHTTPRequestHandler):
         
         if path == "/api/debug":
             try:
+                creds_json = os.environ.get("GOOGLE_SHEETS_CREDENTIALS", "{}")
+                creds_data = json.loads(creds_json)
+                client_email = creds_data.get("client_email", "unknown")
+                project_id = creds_data.get("project_id", "unknown")
+                
                 db = get_firestore_client()
-                collections = [col.id for col in db.collections()]
                 self._send_json(200, {
-                    "status": "success",
-                    "collections": collections,
-                    "project_id": db.project
+                    "status": "credentials_found",
+                    "client_email": client_email,
+                    "project_id": project_id,
+                    "message": "To fix 403, grant the 'Cloud Datastore User' role to this client_email in GCP IAM."
                 })
             except Exception as e:
                 import traceback
