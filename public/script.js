@@ -13,11 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
       step2Title: "Prywatny kanał",
       step2Desc: "Zadowoleni klienci idą do Google Maps. Goście z uwagami otrzymują prywatny formularz, dając Ci szansę na szybką reakcję.",
       step3Title: "Błyskawiczne alerty",
-      step3Desc: "Otrzymujesz negatywny feedback natychmiast wybranym kanałem (e-mail, komunikatory lub arkusze). Rozwiązujesz problem na miejscu, zanim klient opuści lokal.",
+      step3Desc: "Otrzymujesz negatywny feedback natychmiast wybranym kanałem (e-mail, komunikatory lub arkusze kalkulacyjne, np. Google Sheets). Rozwiązujesz problem na miejscu, zanim klient opuści lokal.",
       pricingBadge: "Złoty pakiet",
       pricingTitle: "Abonament",
       pricingPrice: "99 zł",
-      pricingPeriod: " / miesięcznie",
+      pricingPeriod: " / miesiąc",
       pricingDesc: "Pierwsze 14 dni całkowicie za darmo. My dostarczamy spersonalizowany kod QR i wsparcie.",
       contactTitle: "Zamów darmowy test na 14 dni",
       contactDesc: "Wpisz swój e-mail, a przygotujemy dedykowany system QR pod Twoje zbiory opinii.",
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
       step2Title: "Private Channel",
       step2Desc: "Satisfied guests go to Google Maps. Guests with concerns receive a private form, giving you a chance to react quickly.",
       step3Title: "Instant Alerts",
-      step3Desc: "Receive negative feedback instantly via your preferred channel (email, messengers, or spreadsheets). Solve the problem on the spot before the customer leaves.",
+      step3Desc: "Receive negative feedback instantly via your preferred channel (email, messengers, or spreadsheets, e.g. Google Sheets). Solve the problem on the spot before the customer leaves.",
       pricingBadge: "Gold Package",
       pricingTitle: "Subscription",
       pricingPrice: "99 PLN",
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       step2Title: "Приватний канал",
       step2Desc: "Задоволені гості йдуть до Google Maps. Гості із зауваженнями отримують приватну форму, даючи вам шанс на швидку реакцію.",
       step3Title: "Миттєві сповіщення",
-      step3Desc: "Отримуйте негативний фідбек миттєво вибраним каналом (e-mail, месенджери або таблиці). Вирішуйте проблему на місці, перш ніж клієнт залишить заклад.",
+      step3Desc: "Отримуйте негативний фідбек миттєво вибраним каналом (e-mail, месенджери або електронні таблиці, напр. Google Sheets). Вирішуйте проблему на місці, перш ніж клієнт залишить заклад.",
       pricingBadge: "Золотий пакет",
       pricingTitle: "Абонемент",
       pricingPrice: "99 zł",
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
       step2Title: "Приватный канал",
       step2Desc: "Довольные гости идут в Google Maps. Гости с замечаниями получают приватную форму, давая вам шанс на быструю реакцию.",
       step3Title: "Мгновенные уведомления",
-      step3Desc: "Получайте негативный фидбек моментально удобным способом (e-mail, мессенджеры или таблицы). Решайте проблему на месте, пока гость не ушел.",
+      step3Desc: "Получайте негативный фидбек моментально удобным способом (e-mail, мессенджеры или электронные таблицы, напр. Google Sheets). Решайте проблему на месте, пока гость не ушел.",
       pricingBadge: "Золотой пакет",
       pricingTitle: "Абонемент",
       pricingPrice: "99 zł",
@@ -352,17 +352,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      // 2. Fetch clients configuration
-      const response = await fetch('/clients.json?v=1.1');
+      // 2. Fetch client configuration from backend API (queries Firestore Database)
+      const response = await fetch(`/api/client?id=${encodeURIComponent(clientId)}`);
       if (!response.ok) {
-        throw new Error('Failed to load clients database');
+        if (response.status === 404) {
+          showErrorState(
+            'Nieznana firma',
+            `Firma o identyfikatorze "${clientId}" nie została zarejestrowana w naszym systemie.`,
+            true
+          );
+          return;
+        }
+        throw new Error('Failed to load client configuration from server');
       }
       
-      const clientsData = await response.json();
-      clientConfig = clientsData[clientId];
+      const result = await response.json();
+      clientConfig = result.data;
 
       if (!clientConfig) {
-        // Client ID not found in database
         showErrorState(
           'Nieznana firma',
           `Firma o identyfikatorze "${clientId}" nie została zarejestrowana w naszym systemie.`,

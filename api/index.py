@@ -6,12 +6,90 @@ import urllib.parse
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler
 
+# Lazy-loaded Firestore Client
+_db_client = None
+
+def get_firestore_client():
+    global _db_client
+    if _db_client is not None:
+        return _db_client
+        
+    import firebase_admin
+    from firebase_admin import credentials, firestore
+    
+    if not firebase_admin._apps:
+        creds_json = os.environ.get("GOOGLE_SHEETS_CREDENTIALS")
+        if not creds_json:
+            raise RuntimeError("GOOGLE_SHEETS_CREDENTIALS environment variable is missing")
+        creds_data = json.loads(creds_json)
+        cred = credentials.Certificate(creds_data)
+        firebase_admin.initialize_app(cred)
+        
+    _db_client = firestore.client()
+    return _db_client
+
+# Local fallback config helper
+def get_client_from_json(cid):
+    candidates = [
+        os.path.join(os.getcwd(), 'public', 'clients.json'),
+        os.path.join(os.path.dirname(__file__), '..', 'public', 'clients.json'),
+        'public/clients.json'
+    ]
+    for p in candidates:
+        if os.path.exists(p) and os.path.isfile(p):
+            try:
+                with open(p, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                return data.get(cid)
+            except Exception:
+                pass
+    return None
+
+def get_client_config(cid):
+    # Try Firestore
+    try:
+        db = get_firestore_client()
+        doc = db.collection('clients').document(cid).get()
+        if doc.exists:
+            return doc.to_dict()
+    except Exception as e:
+        print(f"[WARNING] Could not fetch config from Firestore for {cid}: {e}")
+        
+    # Fallback to Local JSON
+    return get_client_from_json(cid)
+
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        path = self.path
-        if '?' in path:
-            path = path.split('?')[0]
-    
+        parsed_url = urllib.parse.urlparse(self.path)
+        path = parsed_url.path
+        query_params = urllib.parse.parse_qs(parsed_url.query)
+        
+        if path == "/api/client":
+            client_id = query_params.get('id', [None])[0]
+            if not client_id:
+                self._send_json(400, {
+                    "status": "error",
+                    "message": "Missing required parameter: id"
+                })
+                return
+                
+            client_data = get_client_config(client_id)
+            if not client_data:
+                self._send_json(404, {
+                    "status": "error",
+                    "message": f"Client '{client_id}' not found"
+                })
+                return
+                
+            self._send_json(200, {
+                "status": "success",
+                "data": {
+                    "name": client_data.get("name"),
+                    "logo": client_data.get("logo"),
+                    "googleMapsUrl": client_data.get("googleMapsUrl")
+                }
+            })
+            return
             
         if path == "/" or path == "" or path == "/index.html":
             candidates = [
@@ -155,12 +233,12 @@ class handler(BaseHTTPRequestHandler):
                 self._send_telegram_notification(tg_message)
 
                 # Email alert
-                email_subject = "🚀 Nowa zgłoszenie: Darmowy test 14 dni"
+                email_subject = "🚀 Nowe zgłoszenie: Darmowy test 14 dni"
                 email_body = f"""
                 <html>
                 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; padding: 20px;">
                   <div style="max-width: 600px; margin: 0 auto; background: #ffffff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee;">
-                    <h2 style="color: #007aff; margin-top: 0;">🚀 Nowa zgłoszenie: Darmowy test 14 dni</h2>
+                    <h2 style="color: #007aff; margin-top: 0;">🚀 Nowe zgłoszenie: Darmowy test 14 dni</h2>
                     <p>Otrzymano nowe zapytanie o 14-dniowy darmowy test systemu ReviewShield.</p>
                     <table style="border-collapse: collapse; width: 100%; margin-top: 16px;">
                       <tr>
@@ -183,6 +261,11 @@ class handler(BaseHTTPRequestHandler):
             else:
                 # Send email alert for negative feedback (1, 2 or 3 stars)
                 if rating_val <= 3:
+                    recipient_email = None
+                    client_config = get_client_config(client_id)
+                    if client_config:
+                        recipient_email = client_config.get("adminEmail")
+                        
                     email_subject = f"⚠️ [ReviewShield] Nowa negatywna opinia ({rating_val}★) - {client_id}"
                     email_body = f"""
                     <html>
@@ -213,7 +296,7 @@ class handler(BaseHTTPRequestHandler):
                           </tr>
                         </table>
                         <div style="margin-top: 24px; padding: 12px; background-color: #ffeef0; border-left: 4px solid #ff453a; border-radius: 4px; font-size: 0.9rem; color: #940000; font-weight: bold;">
-                          Reaguj natychmiast, aby rozwiąзать problem zanim klient opuści Twój lokal!
+                          Reaguj natychmiast, aby rozwiązać problem zanim klient opuści Twój lokal!
                         </div>
                         <div style="margin-top: 24px; font-size: 0.85rem; color: #999; text-align: center;">
                           Powered by ReviewShield 🛡️
@@ -222,7 +305,7 @@ class handler(BaseHTTPRequestHandler):
                     </body>
                     </html>
                     """
-                    self._send_email_notification(email_subject, email_body)
+                    self._send_email_notification(email_subject, email_body, recipient_email)
 
             self._send_json(200, {
                 "status": "success",
@@ -278,7 +361,7 @@ class handler(BaseHTTPRequestHandler):
             print(f"[ERROR] Failed to send Telegram notification: {e}")
             return False
 
-    def _send_email_notification(self, subject, body_html):
+    def _send_email_notification(self, subject, body_html, recipient_email=None):
         import smtplib
         from email.mime.text import MIMEText
         from email.mime.multipart import MIMEMultipart
@@ -288,7 +371,7 @@ class handler(BaseHTTPRequestHandler):
         smtp_user = os.environ.get("SMTP_USER")
         smtp_password = os.environ.get("SMTP_PASSWORD")
         sender_email = os.environ.get("SENDER_EMAIL")
-        admin_email = os.environ.get("ADMIN_EMAIL")
+        admin_email = recipient_email or os.environ.get("ADMIN_EMAIL")
 
         if not all([smtp_server, smtp_user, smtp_password, sender_email, admin_email]):
             print("[WARNING] SMTP configurations missing, skipping email notification.")
@@ -317,17 +400,33 @@ class handler(BaseHTTPRequestHandler):
             return False
 
     def _save_feedback(self, timestamp, client_id, rating, message, phone):
+        save_methods = []
+        
+        # 1. Save to Firestore
+        try:
+            db = get_firestore_client()
+            db.collection("feedback").add({
+                "clientId": client_id,
+                "rating": rating,
+                "message": message,
+                "phone": phone,
+                "timestamp": timestamp,
+                "status": "New"
+            })
+            save_methods.append("firestore")
+        except Exception as e:
+            print(f"[WARNING] Firestore save failed: {e}")
+            
+        # 2. Save to Google Sheets
         creds_json = os.environ.get("GOOGLE_SHEETS_CREDENTIALS")
         spreadsheet_id = os.environ.get("GOOGLE_SPREADSHEET_ID")
         sheet_name = os.environ.get("GOOGLE_SHEET_NAME", "")
         
         is_lead = (client_id == 'LANDING_PAGE_LEAD')
         target_sheet = "Leads" if is_lead else sheet_name
-
-        # If env variables are present, authenticate and write to Google Sheets
+        
         if creds_json and spreadsheet_id:
             try:
-                # Dynamic imports to allow running fallback without dependencies installed
                 import gspread
                 from google.oauth2.service_account import Credentials
                 
@@ -340,8 +439,6 @@ class handler(BaseHTTPRequestHandler):
                     ]
                 )
                 gc = gspread.authorize(credentials)
-                
-                # Open spreadsheet
                 sh = gc.open_by_key(spreadsheet_id)
                 
                 worksheet = None
@@ -350,7 +447,6 @@ class handler(BaseHTTPRequestHandler):
                         worksheet = sh.worksheet(target_sheet)
                     except Exception:
                         if is_lead:
-                            # Dynamic sheet creation if Leads is missing
                             try:
                                 worksheet = sh.add_worksheet(title="Leads", rows="1000", cols="6")
                                 worksheet.append_row(["Timestamp", "Client ID", "Rating", "Message", "Phone Number", "Status"])
@@ -361,29 +457,22 @@ class handler(BaseHTTPRequestHandler):
                             worksheet = sh.get_worksheet(0)
                 else:
                     worksheet = sh.get_worksheet(0)
-
                     
-                # Append feedback row
-                # Columns: Timestamp | Client ID | Rating | Message | Phone Number | Status (New)
                 row_data = [timestamp, client_id, rating, message, phone, "New"]
                 worksheet.append_row(row_data)
-                return "google_sheets"
-                
+                save_methods.append("google_sheets")
             except Exception as e:
-                # Wrap Google Sheets errors
-                raise RuntimeError(f"Google Sheets error: {str(e)}")
-        else:
-            # Fallback to local CSV (useful for local development and testing)
+                print(f"[WARNING] Google Sheets save failed: {e}")
+                
+        # 3. If neither worked, fall back to local CSV
+        if not save_methods:
             csv_path = "/tmp/reviewshield_leads.csv" if is_lead else "/tmp/reviewshield_feedback.csv"
             file_exists = os.path.exists(csv_path)
-            
             with open(csv_path, mode="a", newline="", encoding="utf-8") as f:
                 writer = csv.writer(f)
                 if not file_exists:
-                    # Write header
                     writer.writerow(["Timestamp", "Client ID", "Rating", "Message", "Phone Number", "Status"])
                 writer.writerow([timestamp, client_id, rating, message, phone, "New"])
-                
-            # Log local save to stdout (will appear in local dev server logs)
-            print(f"[LOCAL FALLBACK] Saved to {csv_path}: {timestamp} | {client_id} | {rating} | {message} | {phone}")
             return f"local_csv_fallback ({csv_path})"
+            
+        return "+".join(save_methods)
