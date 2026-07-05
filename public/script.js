@@ -6,14 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
       errorTitle: "Brak dostępu",
       errorDesc: "Ten link jest nieaktywny lub niepoprawny. Skontaktuj się z administratorem systemu.",
       demoLabel: "Wybierz wersję demonstracyjną:",
-      landingHeroTitle: "Zbieraj szczery feedback od klientów bez ryzyka dla publicznej reputacji",
-      landingHeroSub: "Nowoczesny system QR do zarządzania opiniami, który pomoże Twojemu biznesowi rosnąć i stawać się lepszym.",
+      landingHeroTitle: "Rozwiązuj problemy klientów na miejscu, zanim trafią do sieci",
+      landingHeroSub: "Błyskawiczny system QR do zbierania prywatnego feedbacku i budowania lojalności gości.",
       step1Title: "Skanowanie QR",
       step1Desc: "Klient skanuje kod QR znajdujący się na stoliku, recepcji lub przy rachunku.",
-      step2Title: "Inteligentny filtr",
-      step2Desc: "Zadowoleni goście (4-5★) idą pisać opinię w Google. Niezadowoleni (1-3★) trafiają do prywatnego formularza.",
-      step3Title: "Wzrost ocen",
-      step3Desc: "Unikasz publicznych 1-gwiazdkowych ocen w Google, dostając szansę na rozwiązanie problemu klienta prywatnie.",
+      step2Title: "Prywatny kanał",
+      step2Desc: "Zadowoleni klienci idą do Google Maps. Goście z uwagami otrzymują prywatny formularz, dając Ci szansę na szybką reakcję.",
+      step3Title: "Błyskawiczne alerty",
+      step3Desc: "Otrzymujesz negatywny feedback natychmiast na e-mail. Rozwiązujesz problem na miejscu, zanim klient opuści lokal.",
       pricingBadge: "Złoty pakiet",
       pricingTitle: "Abonament",
       pricingPrice: "99 zł",
@@ -48,14 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
       errorTitle: "Access Denied",
       errorDesc: "This link is inactive or invalid. Please contact the system administrator.",
       demoLabel: "Select a demo version:",
-      landingHeroTitle: "Collect honest customer feedback without risking your public reputation",
-      landingHeroSub: "A modern QR-based review management system designed to help your business grow and improve.",
+      landingHeroTitle: "Resolve customer issues on the spot before they hit the web",
+      landingHeroSub: "An instant QR-based system for collecting private feedback and building guest loyalty.",
       step1Title: "QR Scanning",
       step1Desc: "The customer scans the QR code located on the table, reception, or with the bill.",
-      step2Title: "Smart Filter",
-      step2Desc: "Satisfied guests (4-5★) go to write a review on Google. Dissatisfied guests (1-3★) go to a private form.",
-      step3Title: "Rating Growth",
-      step3Desc: "You avoid public 1-star reviews on Google, getting a chance to solve the customer's problem privately.",
+      step2Title: "Private Channel",
+      step2Desc: "Satisfied guests go to Google Maps. Guests with concerns receive a private form, giving you a chance to react quickly.",
+      step3Title: "Instant Alerts",
+      step3Desc: "Receive negative feedback instantly via email. Solve the problem on the spot before the customer leaves the venue.",
       pricingBadge: "Gold Package",
       pricingTitle: "Subscription",
       pricingPrice: "99 PLN",
@@ -90,14 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
       errorTitle: "Немає доступу",
       errorDesc: "Це посилання неактивне або недійсне. Будь ласка, зв'яжіться з адміністратором.",
       demoLabel: "Виберіть демо-версію:",
-      landingHeroTitle: "Збирайте чесний фідбек від клієнтів без ризику для публічної репутації",
-      landingHeroSub: "Сучасна QR-система управління відгуками, яка допоможе вашому бізнесу зростати та ставати кращим.",
+      landingHeroTitle: "Вирішуйте проблеми клієнтів на місці, перш ніж вони потраплять в мережу",
+      landingHeroSub: "Миттєва QR-система для збору приватного фідбеку та побудови лояльності гостей.",
       step1Title: "Сканування QR",
       step1Desc: "Клієнт сканує QR-код, що знаходиться на столі, рецепції або біля рахунку.",
-      step2Title: "Розумний фільтр",
-      step2Desc: "Задоволені гості (4-5★) йдуть писати відгук у Google. Незадоволені (1-3★) потрапляють у приватну форму.",
-      step3Title: "Зростання оцінок",
-      step3Desc: "Ви уникаєте публічних 1-зіркових відгуків у Google, отримуючи шанс вирішити проблему клієнта приватно.",
+      step2Title: "Приватний канал",
+      step2Desc: "Задоволені гості йдуть до Google Maps. Гості із зауваженнями отримують приватну форму, даючи вам шанс на швидку реакцію.",
+      step3Title: "Миттєві сповіщення",
+      step3Desc: "Отримуйте негативний фідбек миттєво на e-mail. Вирішуйте проблему на місці, перш ніж клієнт залишить заклад.",
       pricingBadge: "Золотий пакет",
       pricingTitle: "Абонемент",
       pricingPrice: "99 zł",
@@ -132,14 +132,14 @@ document.addEventListener('DOMContentLoaded', () => {
       errorTitle: "Нет доступа",
       errorDesc: "Эта ссылка неактивна или недействительна. Пожалуйста, свяжитесь с администратором.",
       demoLabel: "Выберите демо-версию:",
-      landingHeroTitle: "Собирайте честный фидбек от клиентов без риска для публичной репутации",
-      landingHeroSub: "Современная QR-система управления отзывами, которая поможет вашему бизнесу расти и становиться лучше.",
+      landingHeroTitle: "Решайте проблемы клиентов на месте, прежде чем они попадут в сеть",
+      landingHeroSub: "Мгновенная QR-система для сбора приватного фидбека и построения лояльности гостей.",
       step1Title: "Сканирование QR",
       step1Desc: "Клиент сканирует QR-код, находящийся на столе, ресепшене или около счета.",
-      step2Title: "Умный фильтр",
-      step2Desc: "Довольные гости (4-5★) идут писать отзыв в Google. Недовольные (1-3★) попадают в частную форму.",
-      step3Title: "Рост оценок",
-      step3Desc: "Вы избегаете публичных 1-звездочных отзывов в Google, получая шанс решить проблему клиента приватно.",
+      step2Title: "Приватный канал",
+      step2Desc: "Довольные гости идут в Google Maps. Гости с замечаниями получают приватную форму, давая вам шанс на быструю реакцию.",
+      step3Title: "Мгновенные уведомления",
+      step3Desc: "Получайте негативный фидбек мгновенно на e-mail. Решайте проблему на месте, прежде чем клиент покинет заведение.",
       pricingBadge: "Золотой пакет",
       pricingTitle: "Абонемент",
       pricingPrice: "99 zł",
@@ -208,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const landingContactSuccess = document.getElementById('landing-contact-success');
   
   const langButtons = document.querySelectorAll('.lang-btn');
+  const appWatermark = document.getElementById('app-watermark');
 
   // --- State Variables ---
   let clientId = '';
@@ -222,8 +223,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Toggle active container styling for landing vs mobile survey
     if (targetScreen === screenLanding) {
       appContainer.classList.add('landing-active');
+      if (appWatermark) appWatermark.classList.add('hidden');
     } else {
       appContainer.classList.remove('landing-active');
+      if (appWatermark) appWatermark.classList.remove('hidden');
     }
 
     screens.forEach(screen => {

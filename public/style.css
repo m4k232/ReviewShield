@@ -838,3 +838,30 @@ textarea.form-input {
     font-size: 0.8rem;
   }
 }
+
+/* App Watermark styling */
+.app-watermark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  width: 100%;
+}
+
+.app-watermark a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-weight: 500;
+}
+
+.app-watermark a span {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+.app-watermark a:hover {
+  color: var(--text-primary);
+}

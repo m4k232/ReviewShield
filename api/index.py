@@ -146,12 +146,83 @@ class handler(BaseHTTPRequestHandler):
                 elif "от: " in message:
                     email = message.split("от: ")[-1]
                 
+                # Telegram alert
                 tg_message = (
                     "<b>🚀 Новая заявка на тест 14 дней!</b>\n\n"
                     f"📧 <b>Email:</b> <code>{email}</code>\n"
                     f"⏰ <b>Время:</b> {timestamp}"
                 )
                 self._send_telegram_notification(tg_message)
+
+                # Email alert
+                email_subject = "🚀 Nowa zgłoszenie: Darmowy test 14 dni"
+                email_body = f"""
+                <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; padding: 20px;">
+                  <div style="max-width: 600px; margin: 0 auto; background: #ffffff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee;">
+                    <h2 style="color: #007aff; margin-top: 0;">🚀 Nowa zgłoszenie: Darmowy test 14 dni</h2>
+                    <p>Otrzymano nowe zapytanie o 14-dniowy darmowy test systemu ReviewShield.</p>
+                    <table style="border-collapse: collapse; width: 100%; margin-top: 16px;">
+                      <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold; width: 140px;">Adres e-mail:</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee; color: #007aff; font-weight: bold;">{email}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Czas zapisu:</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee; color: #666;">{timestamp}</td>
+                      </tr>
+                    </table>
+                    <div style="margin-top: 24px; font-size: 0.85rem; color: #999; text-align: center;">
+                      Powered by ReviewShield 🛡️
+                    </div>
+                  </div>
+                </body>
+                </html>
+                """
+                self._send_email_notification(email_subject, email_body)
+            else:
+                # Send email alert for negative feedback (1, 2 or 3 stars)
+                if rating_val <= 3:
+                    email_subject = f"⚠️ [ReviewShield] Nowa negatywna opinia ({rating_val}★) - {client_id}"
+                    email_body = f"""
+                    <html>
+                    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; padding: 20px;">
+                      <div style="max-width: 600px; margin: 0 auto; background: #ffffff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee;">
+                        <h2 style="color: #ff453a; margin-top: 0;">⚠️ Nowa negatywna opinia ({rating_val} gwiazdki)</h2>
+                        <p>Klient zostawił negatywną opinię w systemie ReviewShield.</p>
+                        <table style="border-collapse: collapse; width: 100%; margin-top: 16px;">
+                          <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold; width: 140px;">Klient ID:</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #555;">{client_id}</td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Ocena:</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #ff453a; font-weight: bold;">{rating_val}★</td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Treść opinii:</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222; font-style: italic;">"{message}"</td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Numer telefonu:</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222;">{phone or 'Nie podano'}</td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Czas zapisu:</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #666;">{timestamp}</td>
+                          </tr>
+                        </table>
+                        <div style="margin-top: 24px; padding: 12px; background-color: #ffeef0; border-left: 4px solid #ff453a; border-radius: 4px; font-size: 0.9rem; color: #940000; font-weight: bold;">
+                          Reaguj natychmiast, aby rozwiąзать problem zanim klient opuści Twój lokal!
+                        </div>
+                        <div style="margin-top: 24px; font-size: 0.85rem; color: #999; text-align: center;">
+                          Powered by ReviewShield 🛡️
+                        </div>
+                      </div>
+                    </body>
+                    </html>
+                    """
+                    self._send_email_notification(email_subject, email_body)
 
             self._send_json(200, {
                 "status": "success",
@@ -205,6 +276,44 @@ class handler(BaseHTTPRequestHandler):
                 return True
         except Exception as e:
             print(f"[ERROR] Failed to send Telegram notification: {e}")
+            return False
+
+    def _send_email_notification(self, subject, body_html):
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+
+        smtp_server = os.environ.get("SMTP_SERVER")
+        smtp_port = os.environ.get("SMTP_PORT", "587")
+        smtp_user = os.environ.get("SMTP_USER")
+        smtp_password = os.environ.get("SMTP_PASSWORD")
+        sender_email = os.environ.get("SENDER_EMAIL")
+        admin_email = os.environ.get("ADMIN_EMAIL")
+
+        if not all([smtp_server, smtp_user, smtp_password, sender_email, admin_email]):
+            print("[WARNING] SMTP configurations missing, skipping email notification.")
+            return False
+
+        try:
+            msg = MIMEMultipart("alternative")
+            msg["Subject"] = subject
+            msg["From"] = f"ReviewShield Alerts <{sender_email}>"
+            msg["To"] = admin_email
+
+            part = MIMEText(body_html, "html", "utf-8")
+            msg.attach(part)
+
+            # Connect to SMTP server
+            server = smtplib.SMTP(smtp_server, int(smtp_port), timeout=10)
+            server.starttls()
+            server.login(smtp_user, smtp_password)
+            server.sendmail(sender_email, admin_email, msg.as_string())
+            server.quit()
+            
+            print(f"[INFO] Email notification sent successfully to {admin_email}")
+            return True
+        except Exception as e:
+            print(f"[ERROR] Failed to send Email notification: {e}")
             return False
 
     def _save_feedback(self, timestamp, client_id, rating, message, phone):
