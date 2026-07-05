@@ -64,6 +64,24 @@ class handler(BaseHTTPRequestHandler):
         path = parsed_url.path
         query_params = urllib.parse.parse_qs(parsed_url.query)
         
+        if path == "/api/debug":
+            try:
+                db = get_firestore_client()
+                collections = [col.id for col in db.collections()]
+                self._send_json(200, {
+                    "status": "success",
+                    "collections": collections,
+                    "project_id": db.project
+                })
+            except Exception as e:
+                import traceback
+                self._send_json(500, {
+                    "status": "error",
+                    "message": str(e),
+                    "traceback": traceback.format_exc()
+                })
+            return
+            
         if path == "/api/client":
             client_id = query_params.get('id', [None])[0]
             if not client_id:
