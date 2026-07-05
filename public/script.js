@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
       feedbackLabel: "Twoja opinia",
       feedbackPlaceholder: "Opisz swoje doświadczenia... np. długi czas oczekiwania, zimne jedzenie",
       phoneLabel: "Numer telefonu (opcjonalnie)",
+      rodoDisclaimer: "Podając numer telefonu, zgadzasz się na kontakt w celu rozwiązania zgłoszonego problemu.",
       submitBtn: "Wyślij zgłoszenie",
       successTitle: "Dziękujemy!",
       successDesc: "Twój feedback został przekazany bezpośrednio do właściciela. Doceniamy Twoją szczerość i dołożymy starań, aby ulepszyć nasze usługi.",
@@ -73,9 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
       feedbackTitle: "We are sorry!",
       feedbackDesc: "Tell us what went wrong. Your feedback will go directly to the owner.",
       feedbackLabel: "Your feedback",
-      feedbackPlaceholder: "Describe your experience... e.g., long wait time, cold food",
+      feedbackPlaceholder: "Describe your experience... e.g. long waiting time, cold food",
       phoneLabel: "Phone number (optional)",
-      submitBtn: "Send feedback",
+      rodoDisclaimer: "By providing a phone number, you consent to being contacted to resolve the reported issue.",
+      submitBtn: "Submit feedback",
       successTitle: "Thank you!",
       successDesc: "Your feedback has been sent directly to the owner. We appreciate your honesty and will strive to improve our services.",
       btnRestart: "Finish",
@@ -115,8 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
       feedbackTitle: "Нам шкода!",
       feedbackDesc: "Напишіть, що пішло не так. Ваш відгук потрапить безпосередньо до власника.",
       feedbackLabel: "Ваш відгук",
-      feedbackPlaceholder: "Опишіть свій досвід... наприклад, довге очікування, холодна їжа",
+      feedbackPlaceholder: "Опишіть свій досвід... наприклад, довгий час очікування, холодна їжа",
       phoneLabel: "Номер телефону (необов'язково)",
+      rodoDisclaimer: "Вказуючи номер телефону, ви погоджуєтесь на зв'язок для вирішення повідомленої проблеми.",
       submitBtn: "Надіслати відгук",
       successTitle: "Дякуємо!",
       successDesc: "Ваш відгук передано безпосередньо власнику. Ми цінуємо вашу відвертість і докладемо зусиль, щоб покращити наші послуги.",
@@ -157,8 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
       feedbackTitle: "Нам жаль!",
       feedbackDesc: "Напишите, что пошло не так. Ваш отзыв попадет напрямую к владельцу.",
       feedbackLabel: "Ваш отзыв",
-      feedbackPlaceholder: "Опишите свой опыт... например, долгое ожидание, холодная еда",
-      phoneLabel: "Номер телефону (необязательно)",
+      feedbackPlaceholder: "Опишите свой опыт... например, долгое время ожидания, холодная еда",
+      phoneLabel: "Номер телефона (необязательно)",
+      rodoDisclaimer: "Указывая номер телефона, вы соглашаетесь на связь для решения возникшей проблемы.",
       submitBtn: "Отправить отзыв",
       successTitle: "Спасибо!",
       successDesc: "Ваш отзыв передан напрямую владельцу. Мы ценим вашу откровенность и постараемся улучшить наши услуги.",
@@ -359,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
           showErrorState(
             'Nieznana firma',
             `Firma o identyfikatorze "${clientId}" nie została zarejestrowana w naszym systemie.`,
-            true
+            false
           );
           return;
         }
@@ -373,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showErrorState(
           'Nieznana firma',
           `Firma o identyfikatorze "${clientId}" nie została zarejestrowana w naszym systemie.`,
-          true
+          false
         );
         return;
       }
