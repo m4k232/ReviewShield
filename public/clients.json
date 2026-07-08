@@ -1,11 +1,11 @@
 {
   "barber_warszawa": {
-    "name": "The Gilded Edge Barber Shop",
+    "name": "Barbershop Warszawa",
     "logo": "/assets/barber_logo.jpg",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Dandys+Barber+Shop+Jaktorowska+8+Warszawa"
   },
   "pizza_krakow": {
-    "name": "Slice & Stone Pizzeria",
+    "name": "Pizzeria Bella Napoli",
     "logo": "/assets/pizza_logo.jpg",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pizzatopia+Szewska+Krakow"
   }
