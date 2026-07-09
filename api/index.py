@@ -3,6 +3,7 @@ import os
 import csv
 import urllib.request
 import urllib.parse
+import html
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler
 
@@ -227,7 +228,7 @@ class handler(BaseHTTPRequestHandler):
                 # Telegram alert
                 tg_message = (
                     "<b>🚀 Новая заявка на тест 14 дней!</b>\n\n"
-                    f"📧 <b>Email:</b> <code>{email}</code>\n"
+                    f"📧 <b>Email:</b> <code>{html.escape(email)}</code>\n"
                     f"⏰ <b>Время:</b> {timestamp}"
                 )
                 self._send_telegram_notification(tg_message)
@@ -310,12 +311,16 @@ class handler(BaseHTTPRequestHandler):
                 # Send Telegram client alert if telegramChatId is configured
                 if client_config and client_config.get("telegramChatId"):
                     client_name = client_config.get("name", client_id)
+                    safe_message = html.escape(message)
+                    safe_name = html.escape(client_name)
+                    safe_phone = html.escape(phone) if phone else 'Nie podano'
+                    
                     tg_alert_message = (
                         f"⚠️ <b>[ReviewShield] Nowa negatywna opinia</b>\n\n"
-                        f"📍 <b>Lokal:</b> {client_name}\n"
+                        f"📍 <b>Lokal:</b> {safe_name}\n"
                         f"⭐ <b>Ocena:</b> {rating_val}★\n"
-                        f"💬 <b>Treść:</b> \"{message}\"\n"
-                        f"📞 <b>Telefon:</b> {phone or 'Nie podano'}\n"
+                        f"💬 <b>Treść:</b> \"{safe_message}\"\n"
+                        f"📞 <b>Telefon:</b> {safe_phone}\n"
                         f"🕒 <b>Czas:</b> {timestamp}\n\n"
                         f"👉 <i>Zareaguj natychmiast, aby rozwiązać problem zanim gość opuści lokal!</i>"
                     )
