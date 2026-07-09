@@ -306,6 +306,20 @@ class handler(BaseHTTPRequestHandler):
                     </html>
                     """
                     self._send_email_notification(email_subject, email_body, recipient_email)
+                
+                # Send Telegram client alert if telegramChatId is configured
+                if client_config and client_config.get("telegramChatId"):
+                    client_name = client_config.get("name", client_id)
+                    tg_alert_message = (
+                        f"⚠️ <b>[ReviewShield] Nowa negatywna opinia</b>\n\n"
+                        f"📍 <b>Lokal:</b> {client_name}\n"
+                        f"⭐ <b>Ocena:</b> {rating_val}★\n"
+                        f"💬 <b>Treść:</b> \"{message}\"\n"
+                        f"📞 <b>Telefon:</b> {phone or 'Nie podano'}\n"
+                        f"🕒 <b>Czas:</b> {timestamp}\n\n"
+                        f"👉 <i>Zareaguj natychmiast, aby rozwiązać problem zanim gość opuści lokal!</i>"
+                    )
+                    self._send_telegram_review_alert(client_config.get("telegramChatId"), tg_alert_message)
 
             self._send_json(200, {
                 "status": "success",
@@ -359,6 +373,30 @@ class handler(BaseHTTPRequestHandler):
                 return True
         except Exception as e:
             print(f"[ERROR] Failed to send Telegram notification: {e}")
+            return False
+
+    def _send_telegram_review_alert(self, chat_id, message_text):
+        bot_token = os.environ.get("TELEGRAM_CLIENTS_BOT_TOKEN")
+        if not bot_token or not chat_id:
+            print("[WARNING] Telegram clients credentials or chat_id missing, skipping alert.")
+            return False
+            
+        url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+        payload = {
+            "chat_id": chat_id,
+            "text": message_text,
+            "parse_mode": "HTML"
+        }
+        
+        try:
+            data = urllib.parse.urlencode(payload).encode("utf-8")
+            req = urllib.request.Request(url, data=data, method="POST")
+            with urllib.request.urlopen(req, timeout=5) as response:
+                res_body = response.read().decode("utf-8")
+                print(f"[INFO] Telegram client review alert sent: {res_body}")
+                return True
+        except Exception as e:
+            print(f"[ERROR] Failed to send Telegram client review alert: {e}")
             return False
 
     def _send_email_notification(self, subject, body_html, recipient_email=None):
