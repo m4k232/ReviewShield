@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorFeedbackShort: "Proszę napisać dłuższą opinię (minimum 5 znaków).",
       errorPhone: "Niepoprawny format numeru telefonu.",
       redirecting: "Przekierowywanie do Google Maps...",
-      errorRateLimit: "Przekroczono limit wysłanych opinii. Spróbuj ponownie później."
+      errorRateLimit: "Przekroczono limit wysłanych opinii. Spróbuj ponownie później.",
+      errorAdblock: "Proszę wyłączyć AdBlocka (Blokera Reklam), aby wysłać opinię."
     },
     en: {
       loading: "Loading...",
@@ -85,7 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorFeedbackShort: "Please write a longer feedback (minimum 5 characters).",
       errorPhone: "Invalid phone number format.",
       redirecting: "Redirecting to Google Maps...",
-      errorRateLimit: "Review submission limit exceeded. Please try again later."
+      errorRateLimit: "Review submission limit exceeded. Please try again later.",
+      errorAdblock: "Please disable your AdBlocker to submit feedback."
     },
     uk: {
       loading: "Завантаження...",
@@ -128,7 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorFeedbackShort: "Будь ласка, напишіть довший відгук (мінімум 5 символів).",
       errorPhone: "Неправильний формат номеру телефону.",
       redirecting: "Перенаправлення на Google Maps...",
-      errorRateLimit: "Перевищено ліміт відправки відгуків. Спробуйте пізніше."
+      errorRateLimit: "Перевищено ліміт відправки відгуків. Спробуйте пізніше.",
+      errorAdblock: "Будь ласка, вимкніть AdBlock, щоб надіслати відгук."
     },
     ru: {
       loading: "Загрузка...",
@@ -171,7 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorFeedbackShort: "Пожалуйста, напишите более длинный отзыв (минимум 5 символов).",
       errorPhone: "Неправильный формат номера телефона.",
       redirecting: "Перенаправление на Google Maps...",
-      errorRateLimit: "Превышен лимит отправки отзывов. Попробуйте позже."
+      errorRateLimit: "Превышен лимит отправки отзывов. Попробуйте позже.",
+      errorAdblock: "Пожалуйста, отключите AdBlock для отправки отзыва."
     }
   };
 
@@ -583,6 +587,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
+      if (!recaptchaToken) {
+        throw new Error(translations[currentLang].errorAdblock || 'Proszę wyłączyć AdBlocka.');
+      }
+
       const payload = {
         client_id: clientId,
         rating: selectedRating,
@@ -657,6 +665,12 @@ document.addEventListener('DOMContentLoaded', () => {
           resolve(null);
         }
       });
+
+      if (!recaptchaToken) {
+        landingEmailError.textContent = 'Proszę wyłączyć AdBlocka, aby wysłać zgłoszenie.';
+        landingEmail.style.borderColor = 'var(--accent-red)';
+        return;
+      }
 
       // High-fidelity UI flow: show success state client-side
       landingContactForm.classList.add('hidden');
