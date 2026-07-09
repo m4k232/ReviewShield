@@ -647,6 +647,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      // Get reCAPTCHA token
+      const recaptchaToken = await new Promise((resolve) => {
+        if (typeof grecaptcha !== 'undefined') {
+          grecaptcha.ready(() => {
+            grecaptcha.execute('6LcvmUQtAAAAAC_GbgWPjPy7M6p3SNOhoIo3k1es', {action: 'submit'}).then(resolve);
+          });
+        } else {
+          resolve(null);
+        }
+      });
+
       // High-fidelity UI flow: show success state client-side
       landingContactForm.classList.add('hidden');
       landingContactSuccess.classList.remove('hidden');
@@ -662,7 +673,8 @@ document.addEventListener('DOMContentLoaded', () => {
             client_id: 'LANDING_PAGE_LEAD',
             rating: 5,
             message: `Zapytanie o darmowy test 14-dniowy od: ${emailVal}`,
-            phone: ''
+            phone: '',
+            recaptcha_token: recaptchaToken
           })
         });
       } catch (err) {
