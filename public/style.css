@@ -293,6 +293,13 @@ html {
   letter-spacing: 0.2px;
 }
 
+.rodo-disclaimer {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-top: 0.25rem;
+}
+
 .input-label .required {
   color: var(--accent-red);
 }

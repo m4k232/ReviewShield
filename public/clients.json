@@ -8,5 +8,11 @@
     "name": "Pizzeria Bella Napoli",
     "logo": "/assets/pizza_logo.jpg",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pizzatopia+Szewska+Krakow"
+  },
+  "kredki_warszawa": {
+    "name": "Kredki Cafe Store",
+    "logo": "/assets/kredki_logo.jpg",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Kredki+Cafe+Store+Mieroslawskiego+Warszawa",
+    "adminEmail": "rvwshield@gmail.com"
   }
 }
