@@ -294,6 +294,14 @@ class handler(BaseHTTPRequestHandler):
                             <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222;">{phone or 'Nie podano'}</td>
                           </tr>
                           <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Kelner ID:</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222;">{waiter_id or 'Nie przypisano'}</td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Stolik ID:</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222;">{table_id or 'Nie przypisano'}</td>
+                          </tr>
+                          <tr>
                             <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Czas zapisu:</td>
                             <td style="padding: 10px; border-bottom: 1px solid #eee; color: #666;">{timestamp}</td>
                           </tr>
@@ -316,6 +324,8 @@ class handler(BaseHTTPRequestHandler):
                     safe_message = html.escape(message)
                     safe_name = html.escape(client_name)
                     safe_phone = html.escape(phone) if phone else 'Nie podano'
+                    safe_waiter = html.escape(waiter_id) if waiter_id else 'Nie przypisano'
+                    safe_table = html.escape(table_id) if table_id else 'Nie przypisano'
                     
                     tg_alert_message = (
                         f"⚠️ <b>[ReviewShield] Nowa negatywna opinia</b>\n\n"
@@ -323,6 +333,8 @@ class handler(BaseHTTPRequestHandler):
                         f"⭐ <b>Ocena:</b> {rating_val}★\n"
                         f"💬 <b>Treść:</b> \"{safe_message}\"\n"
                         f"📞 <b>Telefon:</b> {safe_phone}\n"
+                        f"👤 <b>Kelner:</b> {safe_waiter}\n"
+                        f"🪑 <b>Stolik:</b> {safe_table}\n"
                         f"🕒 <b>Czas:</b> {timestamp}\n\n"
                         f"👉 <i>Zareaguj natychmiast, aby rozwiązać problem zanim gość opuści lokal!</i>"
                     )
