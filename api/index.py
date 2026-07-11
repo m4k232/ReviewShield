@@ -270,6 +270,21 @@ class handler(BaseHTTPRequestHandler):
                         recipient_email = client_config.get("adminEmail")
                         
                     email_subject = f"⚠️ [ReviewShield] Nowa negatywna opinia ({rating_val}★) - {client_id}"
+                    
+                    table_row = f"""
+                          <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Stolik:</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222;">{html.escape(table_id)}</td>
+                          </tr>
+                    """ if table_id else ""
+
+                    waiter_row = f"""
+                          <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Kelner:</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222;">{html.escape(waiter_id)}</td>
+                          </tr>
+                    """ if waiter_id else ""
+
                     email_body = f"""
                     <html>
                     <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; padding: 20px;">
@@ -281,6 +296,8 @@ class handler(BaseHTTPRequestHandler):
                             <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold; width: 140px;">Klient ID:</td>
                             <td style="padding: 10px; border-bottom: 1px solid #eee; color: #555;">{client_id}</td>
                           </tr>
+                          {table_row}
+                          {waiter_row}
                           <tr>
                             <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Ocena:</td>
                             <td style="padding: 10px; border-bottom: 1px solid #eee; color: #ff453a; font-weight: bold;">{rating_val}★</td>
@@ -292,14 +309,6 @@ class handler(BaseHTTPRequestHandler):
                           <tr>
                             <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Numer telefonu:</td>
                             <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222;">{phone or 'Nie podano'}</td>
-                          </tr>
-                          <tr>
-                            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Kelner ID:</td>
-                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222;">{waiter_id or 'Nie przypisano'}</td>
-                          </tr>
-                          <tr>
-                            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Stolik ID:</td>
-                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222;">{table_id or 'Nie przypisano'}</td>
                           </tr>
                           <tr>
                             <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Czas zapisu:</td>
@@ -324,17 +333,19 @@ class handler(BaseHTTPRequestHandler):
                     safe_message = html.escape(message)
                     safe_name = html.escape(client_name)
                     safe_phone = html.escape(phone) if phone else 'Nie podano'
-                    safe_waiter = html.escape(waiter_id) if waiter_id else 'Nie przypisano'
-                    safe_table = html.escape(table_id) if table_id else 'Nie przypisano'
                     
                     tg_alert_message = (
                         f"⚠️ <b>[ReviewShield] Nowa negatywna opinia</b>\n\n"
                         f"📍 <b>Lokal:</b> {safe_name}\n"
                         f"⭐ <b>Ocena:</b> {rating_val}★\n"
+                    )
+                    if table_id:
+                        tg_alert_message += f"🪑 <b>Stolik:</b> {html.escape(table_id)}\n"
+                    if waiter_id:
+                        tg_alert_message += f"👤 <b>Kelner:</b> {html.escape(waiter_id)}\n"
+                    tg_alert_message += (
                         f"💬 <b>Treść:</b> \"{safe_message}\"\n"
                         f"📞 <b>Telefon:</b> {safe_phone}\n"
-                        f"👤 <b>Kelner:</b> {safe_waiter}\n"
-                        f"🪑 <b>Stolik:</b> {safe_table}\n"
                         f"🕒 <b>Czas:</b> {timestamp}\n\n"
                         f"👉 <i>Zareaguj natychmiast, aby rozwiązać problem zanim gość opuści lokal!</i>"
                     )
