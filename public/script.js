@@ -44,7 +44,58 @@ document.addEventListener('DOMContentLoaded', () => {
       redirecting: "Przekierowywanie do Google Maps...",
       errorRateLimit: "Przekroczono limit wysłanych opinii. Spróbuj ponownie później.",
       errorAdblock: "Proszę wyłączyć AdBlocka (Blokera Reklam), aby wysłać opinię.",
-      directGoogleLink: "Chcę przejść bezpośrednio do Google Maps"
+      directGoogleLink: "Chcę przejść bezpośrednio do Google Maps",
+      faqTitle: "Najczęstsze pytania (Q&A)",
+      faqContent: `
+        <div class="faq-item">
+          <h4 class="faq-q">Czy system ReviewShield jest w 100% legalny?</h4>
+          <p class="faq-a">Tak. System jest w pełni zgodny z dyrektywą Omnibus i wytycznymi UOKiK. Nie blokujemy opinii – goście na ekranie zgłoszenia reklamacji mają widoczny bezpośredni link umożliwiający przejście do Google Maps.</p>
+        </div>
+        <div class="faq-item" style="margin-top: 15px;">
+          <h4 class="faq-q">Jak chronicie dane osobowe (RODO)?</h4>
+          <p class="faq-a">Podanie telefonu jest dobrowolne. Zbieramy je wyłącznie w celu ułatwienia kontaktu menedżera z gościem. Podpisujemy z lokalami umowę powierzenia przetwarzania danych osobowych (DPA).</p>
+        </div>
+        <div class="faq-item" style="margin-top: 15px;">
+          <h4 class="faq-q">Czy muszę podpisywać długoterminową umowę?</h4>
+          <p class="faq-a">Nie, abonament 99 PLN/miesiąc jest rozliczany w trybie miesięcznym. Możesz zrezygnować w każdej chwili z końcem opłaconego okresu.</p>
+        </div>
+      `,
+      regulaminTitle: "Regulamin świadczenia usług",
+      regulaminContent: `
+        <h4>Regulamin świadczenia usług drogą elektroniczną</h4>
+        <p>Ostatnia aktualizacja: 11 lipca 2026 r.</p>
+        <h4>1. Postanowienia ogólne</h4>
+        <p>Niniejszy Regulamin określa zasady i warunki korzystania z platformy SaaS ReviewShield, dostępnej pod adresem internetowym revshield.pl, za pośrednictwem której świadczone są usługi drogą elektroniczną na rzecz Klientów B2B (przedsiębiorców).</p>
+        <h4>2. Definicje</h4>
+        <p>Usługodawca: właściciel projektu ReviewShield (kontakt: rvwshield@gmail.com). Klient: przedsiębiorca B2B korzystający z systemu.</p>
+        <h4>3. Rodzaje i zakres świadczonych usług</h4>
+        <p>Udostępnienie spersonalizowanego systemu zbierania opinii poprzez dedykowane kody QR, wysyłanie powiadomień w czasie rzeczywistym i dostarczanie statystyk.</p>
+        <h4>4. Warunki świadczenia usług i wymagania techniczne</h4>
+        <p>Do korzystania z Serwisu niezbędne są: urządzenie z dostępem do Internetu, przeglądarka internetowa z obsługą JavaScript oraz aktywna skrzynka e-mail.</p>
+        <h4>5. Płatności i warunki subskrypcji</h4>
+        <p>Okres próbny trwa 14 dni. Po okresie próbnym opłata wynosi 99 PLN netto miesięcznie za jeden lokal. Usługodawca wystawia faktury bez VAT na podstawie zwolnienia podmiotowego (art. 113 ust. 1 ustawy o VAT). Rezygnacja jest możliwa w dowolnym momencie mailowo.</p>
+        <h4>6. Tryb postępowania reklamacyjnego</h4>
+        <p>Zgłoszenia reklamacyjne prosimy składać na adres e-mail: rvwshield@gmail.com. Rozpatrujemy je w terminie do 14 dni.</p>
+        <h4>7. Prawa autorskie</h4>
+        <p>Wszelkie prawa do oprogramowania, kodu źródłowego, logotypu i zawartości strony revshield.pl należą do Usługodawcy.</p>
+      `,
+      privacyTitle: "Polityka Prywatności",
+      privacyContent: `
+        <h4>Polityka Prywatności serwisu ReviewShield</h4>
+        <p>Ostatnia aktualizacja: 11 lipca 2026 r.</p>
+        <h4>1. Administrator Danych Osobowych</h4>
+        <p>W odniesieniu do strony revshield.pl administratorem jesteśmy my (rvwshield@gmail.com). W przypadku danych gości zbieranych przez kody QR w lokalach, administratorem jest dany lokal, a my działamy jako Procesor (Podmiot Przetwarzający) na podstawie umowy DPA.</p>
+        <h4>2. Zakres zbieranych danych</h4>
+        <p>Przetwarzamy: dobrowolnie podany numer telefonu, treść opinii, e-mail (w formularzu ofertowym) oraz dane zbierane automatycznie (adres IP, pliki cookies, Local Storage) w celach antyspamowych.</p>
+        <h4>3. Cel i podstawa prawna</h4>
+        <p>Dane przetwarzamy na podstawie zgody użytkownika (art. 6 ust. 1 lit. a RODO) w celu zbierania feedbacku i kontaktu, a także na podstawie prawnie uzasadnionego interesu (antyspam — art. 6 ust. 1 lit. f RODO).</p>
+        <h4>4. Okres przechowywania danych</h4>
+        <p>Dane gości (opinie i telefony) przechowujemy przez maksymalnie 6 miesięcy, a e-maile handlowe do czasu zakończenia rozmów lub wniesienia sprzeciwu.</p>
+        <h4>5. Prawa użytkownika</h4>
+        <p>Masz prawo do wglądu, poprawiania, ograniczenia i usunięcia swoich danych. Możesz również wycofać zgodę lub złożyć skargę do PUODO. Kontakt: rvwshield@gmail.com.</p>
+        <h4>6. Odbiorcy danych</h4>
+        <p>Dane przekazujemy wyłącznie menedżerom lokalu, którego opinia dotyczy, oraz zaufanym podprocesorom (Vercel, Telegram API) na podstawie umów powierzenia.</p>
+      `
     },
     en: {
       loading: "Loading...",
@@ -89,7 +140,58 @@ document.addEventListener('DOMContentLoaded', () => {
       redirecting: "Redirecting to Google Maps...",
       errorRateLimit: "Review submission limit exceeded. Please try again later.",
       errorAdblock: "Please disable your AdBlocker to submit feedback.",
-      directGoogleLink: "I want to go directly to Google Maps"
+      directGoogleLink: "I want to go directly to Google Maps",
+      faqTitle: "Frequently Asked Questions (Q&A)",
+      faqContent: `
+        <div class="faq-item">
+          <h4 class="faq-q">Is the ReviewShield system 100% legal?</h4>
+          <p class="faq-a">Yes. The system is fully compliant with the Omnibus Directive and UOKiK guidelines. We do not block reviews – guests always have a visible direct link to go to Google Maps on the complaint page.</p>
+        </div>
+        <div class="faq-item" style="margin-top: 15px;">
+          <h4 class="faq-q">How do you protect personal data (GDPR)?</h4>
+          <p class="faq-a">Providing a phone number is optional. We collect it only to allow the restaurant manager to contact the guest to resolve the issue. We sign a Data Processing Agreement (DPA) with venues.</p>
+        </div>
+        <div class="faq-item" style="margin-top: 15px;">
+          <h4 class="faq-q">Do I have to sign a long-term contract?</h4>
+          <p class="faq-a">No, the 99 PLN/month subscription is billed monthly. You can cancel at any time at the end of the paid billing period.</p>
+        </div>
+      `,
+      regulaminTitle: "Terms of Service",
+      regulaminContent: `
+        <h4>Terms of Service (Electronic Services)</h4>
+        <p>Last updated: July 11, 2026</p>
+        <h4>1. General Provisions</h4>
+        <p>These Terms outline the rules for using the ReviewShield SaaS platform at revshield.pl, providing electronic services to B2B clients (merchants).</p>
+        <h4>2. Definitions</h4>
+        <p>Service Provider: owner of ReviewShield (contact: rvwshield@gmail.com). Client: B2B merchant using the platform.</p>
+        <h4>3. Scope of Services</h4>
+        <p>Providing a personalized QR review system, real-time alerts, and statistics reports.</p>
+        <h4>4. Technical Requirements</h4>
+        <p>To use the Service, you need an internet connection, a web browser supporting JavaScript, and an active email address.</p>
+        <h4>5. Payments and Subscription</h4>
+        <p>Free trial is 14 days. Afterwards, the fee is 99 PLN net per month per location. Invoices are issued without VAT under Polish VAT exemption (Art. 113 paragraph 1 of the VAT Act). Cancel anytime via email.</p>
+        <h4>6. Complaint Procedure</h4>
+        <p>Complaints will be resolved within 14 days. Please submit complaints to rvwshield@gmail.com.</p>
+        <h4>7. Intellectual Property</h4>
+        <p>All software, source code, logos, and contents of revshield.pl belong to the Service Provider.</p>
+      `,
+      privacyTitle: "Privacy Policy",
+      privacyContent: `
+        <h4>ReviewShield Privacy Policy</h4>
+        <p>Last updated: July 11, 2026</p>
+        <h4>1. Data Controller</h4>
+        <p>ReviewShield is the controller for website data (rvwshield@gmail.com). For guest reviews, ReviewShield acts as a Data Processor on behalf of the restaurant (DPA applies).</p>
+        <h4>2. Personal Data Collected</h4>
+        <p>We process phone numbers (optional), review text, e-mail (from contact forms), IP addresses, and cookies to prevent spam.</p>
+        <h4>3. Purpose and Legal Basis</h4>
+        <p>We process data based on user consent (Art. 6 par. 1 lit. a GDPR) to collect feedback and facilitate contact, and based on legitimate interest (spam prevention — Art. 6 par. 1 lit. f GDPR).</p>
+        <h4>4. Data Retention Period</h4>
+        <p>Guest data (reviews and phone numbers) are kept for up to 6 months. Sales contact emails are processed until negotiations end or objection is raised.</p>
+        <h4>5. User Rights</h4>
+        <p>You have the right to access, rectify, restrict, or delete your data. You can withdraw consent or lodge a complaint with PUODO. Contact: rvwshield@gmail.com.</p>
+        <h4>6. Data Recipients</h4>
+        <p>We share guest data only with managers of the corresponding venue, and trusted sub-processors (Vercel, Telegram API) under strict DPA contracts.</p>
+      `
     },
     uk: {
       loading: "Завантаження...",
@@ -134,7 +236,58 @@ document.addEventListener('DOMContentLoaded', () => {
       redirecting: "Перенаправлення на Google Maps...",
       errorRateLimit: "Перевищено ліміт відправки відгуків. Спробуйте пізніше.",
       errorAdblock: "Будь ласка, вимкніть AdBlock, щоб надіслати відгук.",
-      directGoogleLink: "Я хочу перейти безпосередньо до Google Maps"
+      directGoogleLink: "Я хочу перейти безпосередньо до Google Maps",
+      faqTitle: "Часті питання (Q&A)",
+      faqContent: `
+        <div class="faq-item">
+          <h4 class="faq-q">Чи є система ReviewShield на 100% легальною?</h4>
+          <p class="faq-a">Так. Система повністю відповідає Директиві Omnibus та вимогам UOKiK. Ми не блокуємо відгуки – гості завжди бачать пряме посилання для переходу на Google Maps на сторінці скарги.</p>
+        </div>
+        <div class="faq-item" style="margin-top: 15px;">
+          <h4 class="faq-q">Як ви захищаєте персональні дані (RODO)?</h4>
+          <p class="faq-a">Вказання номера телефону є добровільним. Ми збираємо його лише для полегшення контакту менеджера з гостем. Ми підписуємо з закладами договір про доручення обробки персональних даних (DPA).</p>
+        </div>
+        <div class="faq-item" style="margin-top: 15px;">
+          <h4 class="faq-q">Чи потрібно підписувати довгостроковий договір?</h4>
+          <p class="faq-a">Ні, абонплата 99 PLN/місяць розраховується помісячно. Ви можете скасувати підписку в будь-йкий момент наприкінці оплаченого періоду.</p>
+        </div>
+      `,
+      regulaminTitle: "Регламент надання послуг",
+      regulaminContent: `
+        <h4>Регламент надання послуг електронним шляхом</h4>
+        <p>Останнє оновлення: 11 липня 2026 р.</p>
+        <h4>1. Загальні положення</h4>
+        <p>Цей Регламент визначає правила використання SaaS-платформи ReviewShield на сайті revshield.pl, що надає електронні послуги клієнтам B2B.</p>
+        <h4>2. Визначення</h4>
+        <p>Виконавець: власник проекту ReviewShield (контакт: rvwshield@gmail.com). Клієнт: підприємець B2B, що користується системою.</p>
+        <h4>3. Обсяг послуг</h4>
+        <p>Надання персоналізованої системи збору відгуків через QR-коди, сповіщення в реальному часі та аналітичні звіти.</p>
+        <h4>4. Технічні вимоги</h4>
+        <p>Для користування сервісом необхідні пристрій з доступом до Інтернету, веб-браузер з підтримкою JavaScript та активна електронна пошта.</p>
+        <h4>5. Оплата та підписка</h4>
+        <p>Абонентська плата становить 99 PLN нетто на місяць за один заклад. Клієнт має право на безкоштовний тест протягом 14 днів. Скасування підписки можливе в будь-який момент електронною поштою.</p>
+        <h4>6. Процедура рекламацій</h4>
+        <p>Рекламації розглядаються протягом 14 днів. Звернення надсилайте на rvwshield@gmail.com.</p>
+        <h4>7. Інтелектуальна власність</h4>
+        <p>Усі права на програмне забезпечення, вихідний код, логотипи та вміст сайту revshield.pl належать Виконавцю.</p>
+      `,
+      privacyTitle: "Політика Конфіденційності",
+      privacyContent: `
+        <h4>Політика Конфіденційності ReviewShield</h4>
+        <p>Останнє оновлення: 11 липня 2026 р.</p>
+        <h4>1. Контролер даних</h4>
+        <p>ReviewShield є контролером даних для веб-сайту (rvwshield@gmail.com). Для відгуків гостей закладу ReviewShield діє як Обробник даних (Процесор) за дорученням ресторану (згідно договору DPA).</p>
+        <h4>2. Обсяг даних, що збираються</h4>
+        <p>Ми обробляємо номер телефону (добровільно), текст відгуку, e-mail (з форми замовлення), IP-адреси та файли cookies для боротьби зі спамом.</p>
+        <h4>3. Мета та правова основа</h4>
+        <p>Ми обробляємо дані на основі згоди користувача (арт. 6 абз. 1 літ. a RODO) для збору відгуків та контакту, а також на основі законного інтересу (захист від спаму — арт. 6 абз. 1 літ. f RODO).</p>
+        <h4>4. Термін зберігання даних</h4>
+        <p>Дані гостей (відгуки та телефони) зберігаються протягом максимум 6 місяців. Комерційні e-mail адреси обробляються до завершення переговорів або заперечення користувача.</p>
+        <h4>5. Права користувача</h4>
+        <p>Ви маєте право на доступ, виправлення, обмеження або видалення своїх даних. Ви можете відкликати згоду або подати скаргу до PUODO. Контакт: rvwshield@gmail.com.</p>
+        <h4>6. Отримувачі даних</h4>
+        <p>Ми передаємо дані виключно менеджерам відповідного закладу та довіреним підпроцесорам (Vercel, Telegram API) на основі договорів доручення обробки.</p>
+      `
     },
     ru: {
       loading: "Загрузка...",
@@ -179,7 +332,58 @@ document.addEventListener('DOMContentLoaded', () => {
       redirecting: "Перенаправление на Google Maps...",
       errorRateLimit: "Превышен лимит отправки отзывов. Попробуйте позже.",
       errorAdblock: "Пожалуйста, отключите AdBlock для отправки отзыва.",
-      directGoogleLink: "Я хочу перейти напрямую в Google Карты"
+      directGoogleLink: "Я хочу перейти напрямую в Google Карты",
+      faqTitle: "Частые вопросы (Q&A)",
+      faqContent: `
+        <div class="faq-item">
+          <h4 class="faq-q">Законен ли сервис ReviewShield на 100%?</h4>
+          <p class="faq-a">Да. Система полностью соответствует Директиве Omnibus и требованиям UOKiK. Мы не блокируем отзывы – гости всегда видят прямую ссылку для перехода на Google Maps на странице отправки жалобы.</p>
+        </div>
+        <div class="faq-item" style="margin-top: 15px;">
+          <h4 class="faq-q">Как вы защищаете персональные данные (RODO)?</h4>
+          <p class="faq-a">Указание номера телефона добровольно. Мы собираем его только для связи менеджера заведения с гостем для решения проблемы. Мы подписываем с заведениями договор поручения на обработку данных (DPA).</p>
+        </div>
+        <div class="faq-item" style="margin-top: 15px;">
+          <h4 class="faq-q">Нужно ли заключать долгосрочный контракт?</h4>
+          <p class="faq-a">Нет, абонентская плата 99 PLN/месяц списывается помесячно. Вы можете отменить подписку в любой момент в конце оплаченного периода.</p>
+        </div>
+      `,
+      regulaminTitle: "Регламент предоставления услуг",
+      regulaminContent: `
+        <h4>Regulamin świadczenia usług drogą elektroniczną</h4>
+        <p>Последнее обновление: 11 июля 2026 г.</p>
+        <h4>1. Общие положения</h4>
+        <p>Настоящий Регламент определяет правила использования SaaS-платформы ReviewShield на сайте revshield.pl, оказывающей электронные услуги B2B-клиентам (предпринимателям).</p>
+        <h4>2. Определения</h4>
+        <p>Исполнитель: владелец проекта ReviewShield (контакт: rvwshield@gmail.com). Клиент: предприниматель B2B, использующий платформу.</p>
+        <h4>3. Виды и объем оказываемых услуг</h4>
+        <p>Предоставление персонализированной системы сбора отзывов через QR-коды, уведомления в реальном времени и аналитические отчеты.</p>
+        <h4>4. Технические требования</h4>
+        <p>Для пользования сервисом необходимы устройство с доступом к Интернету, веб-браузер с поддержкой JavaScript и активная электронная почта.</p>
+        <h4>5. Оплата и условия подписки</h4>
+        <p>Бесплатный пробный период составляет 14 дней. После этого плата составляет 99 PLN нетто в месяц за одно заведение. Исполнитель выставляет счета без VAT на основании освобождения от налога (ст. 113 п. 1 Закона о VAT). Отмена подписки возможна в любой момент по e-mail.</p>
+        <h4>6. Рассмотрение жалоб и рекламаций</h4>
+        <p>Жалобы рассматриваются в течение 14 дней. Обращения направляйте по адресу: rvwshield@gmail.com.</p>
+        <h4>7. Авторские права</h4>
+        <p>Все права на программное обеспечение, исходный код, логотипы и содержимое сайта revshield.pl принадлежат Исполнителю.</p>
+      `,
+      privacyTitle: "Политика Конфиденциальности",
+      privacyContent: `
+        <h4>Политика Конфиденциальности ReviewShield</h4>
+        <p>Последнее обновление: 11 июля 2026 г.</p>
+        <h4>1. Администратор персональных данных</h4>
+        <p>ReviewShield является администратором данных веб-сайта (rvwshield@gmail.com). Для отзывов гостей заведений ReviewShield действует как Обработчик данных (Процессор) по поручению ресторана (на основании договора DPA).</p>
+        <h4>2. Категории собираемых данных</h4>
+        <p>Мы обрабатываем номер телефона (добровольно), текст отзыва, e-mail (из контактной формы), IP-адрес и файлы cookies для защиты от спама.</p>
+        <h4>3. Цели и правовые основания</h4>
+        <p>Мы обрабатываем данные на основании согласия пользователя (ст. 6 п. 1 лит. a GDPR) для сбора отзывов и контакта, а также на основании законного интереса (защита от спама — ст. 6 п. 1 лит. f GDPR).</p>
+        <h4>4. Сроки хранения данных</h4>
+        <p>Данные гостей (отзывы и телефоны) хранятся максимум 6 месяцев. Контактные e-mail адреса обрабатываются до окончания переговоров или возражения со стороны пользователя.</p>
+        <h4>5. Права пользователя</h4>
+        <p>Вы имеете право на доступ, исправление, ограничение или удаление своих данных. Вы можете отозвать согласие или подать жалобу в PUODO. Контакт: rvwshield@gmail.com.</p>
+        <h4>6. Получатели данных</h4>
+        <p>Мы передаем данные исключительно менеджерам соответствующего заведения и доверенным субподрядчикам (Vercel, Telegram API) на основании договоров поручения.</p>
+      `
     }
   };
 
@@ -302,6 +506,15 @@ document.addEventListener('DOMContentLoaded', () => {
         el.placeholder = translations[lang][key];
       }
     });
+
+    // Update active accordion height if open
+    const activeAccordionItem = document.querySelector('.accordion-item.active');
+    if (activeAccordionItem) {
+      const activeContent = activeAccordionItem.querySelector('.accordion-content');
+      if (activeContent) {
+        activeContent.style.maxHeight = activeContent.scrollHeight + 'px';
+      }
+    }
     
     // Refresh error messages if currently displayed
     if (messageError.textContent) {
