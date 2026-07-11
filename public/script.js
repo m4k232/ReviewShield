@@ -746,6 +746,12 @@ document.addEventListener('DOMContentLoaded', () => {
     renderStars(0, 'active');
     feedbackForm.reset();
     clearErrors();
+    
+    // Re-parse query parameters in case the URL was changed without page reload
+    const urlParams = new URLSearchParams(window.location.search);
+    tableId = urlParams.get('table') || '';
+    waiterId = urlParams.get('waiter') || '';
+    
     showScreen(screenRating);
   });
 
