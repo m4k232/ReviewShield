@@ -160,6 +160,8 @@ class handler(BaseHTTPRequestHandler):
         rating = data.get('rating')
         message = data.get('message')
         phone = data.get('phone', '')
+        table_id = data.get('table_id', '') or data.get('table', '')
+        waiter_id = data.get('waiter_id', '') or data.get('waiter', '')
         recaptcha_token = data.get('recaptcha_token', '')
         
         if not client_id or rating is None or not message:
@@ -215,7 +217,7 @@ class handler(BaseHTTPRequestHandler):
         
         # 5. Save feedback data
         try:
-            save_method = self._save_feedback(timestamp, client_id, rating_val, message, phone)
+            save_method = self._save_feedback(timestamp, client_id, rating_val, message, phone, waiter_id, table_id)
             
             # Send Telegram notification for landing page leads
             if client_id == 'LANDING_PAGE_LEAD':
@@ -442,7 +444,7 @@ class handler(BaseHTTPRequestHandler):
             print(f"[ERROR] Failed to send Email notification: {e}")
             return False
 
-    def _save_feedback(self, timestamp, client_id, rating, message, phone):
+    def _save_feedback(self, timestamp, client_id, rating, message, phone, waiter_id='', table_id=''):
         save_methods = []
         
         # 1. Save to Firestore
@@ -454,7 +456,9 @@ class handler(BaseHTTPRequestHandler):
                 "message": message,
                 "phone": phone,
                 "timestamp": timestamp,
-                "status": "New"
+                "status": "New",
+                "waiterId": waiter_id,
+                "tableId": table_id
             })
             save_methods.append("firestore")
         except Exception as e:
@@ -516,7 +520,7 @@ class handler(BaseHTTPRequestHandler):
                 else:
                     worksheet = sh.get_worksheet(0)
                     
-                row_data = [timestamp, client_id, rating, message, phone, "New"]
+                row_data = [timestamp, client_id, rating, message, phone, "New", waiter_id, table_id]
                 worksheet.append_row(row_data)
                 save_methods.append("google_sheets")
             except Exception as e:
@@ -529,8 +533,14 @@ class handler(BaseHTTPRequestHandler):
             with open(csv_path, mode="a", newline="", encoding="utf-8") as f:
                 writer = csv.writer(f)
                 if not file_exists:
-                    writer.writerow(["Timestamp", "Client ID", "Rating", "Message", "Phone Number", "Status"])
-                writer.writerow([timestamp, client_id, rating, message, phone, "New"])
+                    if is_lead:
+                        writer.writerow(["Timestamp", "Client ID", "Rating", "Message", "Phone Number", "Status"])
+                    else:
+                        writer.writerow(["Timestamp", "Client ID", "Rating", "Message", "Phone Number", "Status", "Waiter ID", "Table ID"])
+                if is_lead:
+                    writer.writerow([timestamp, client_id, rating, message, phone, "New"])
+                else:
+                    writer.writerow([timestamp, client_id, rating, message, phone, "New", waiter_id, table_id])
             return f"local_csv_fallback ({csv_path})"
             
         return "+".join(save_methods)

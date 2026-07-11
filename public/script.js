@@ -429,6 +429,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- State Variables ---
   let clientId = '';
+  let tableId = '';
+  let waiterId = '';
   let clientConfig = null;
   let selectedRating = 0;
 
@@ -578,6 +580,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Parse query params
     const urlParams = new URLSearchParams(window.location.search);
     clientId = urlParams.get('client');
+    tableId = urlParams.get('table') || '';
+    waiterId = urlParams.get('waiter') || '';
 
     if (!clientId) {
       // Show main product landing page instead of error
@@ -829,6 +833,8 @@ document.addEventListener('DOMContentLoaded', () => {
         rating: selectedRating,
         message: messageVal,
         phone: phoneVal || '',
+        table_id: tableId,
+        waiter_id: waiterId,
         recaptcha_token: recaptchaToken
       };
 
