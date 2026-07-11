@@ -43,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorPhone: "Niepoprawny format numeru telefonu.",
       redirecting: "Przekierowywanie do Google Maps...",
       errorRateLimit: "Przekroczono limit wysłanych opinii. Spróbuj ponownie później.",
-      errorAdblock: "Proszę wyłączyć AdBlocka (Blokera Reklam), aby wysłać opinię."
+      errorAdblock: "Proszę wyłączyć AdBlocka (Blokera Reklam), aby wysłać opinię.",
+      directGoogleLink: "Chcę przejść bezpośrednio do Google Maps"
     },
     en: {
       loading: "Loading...",
@@ -87,7 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorPhone: "Invalid phone number format.",
       redirecting: "Redirecting to Google Maps...",
       errorRateLimit: "Review submission limit exceeded. Please try again later.",
-      errorAdblock: "Please disable your AdBlocker to submit feedback."
+      errorAdblock: "Please disable your AdBlocker to submit feedback.",
+      directGoogleLink: "I want to go directly to Google Maps"
     },
     uk: {
       loading: "Завантаження...",
@@ -131,7 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorPhone: "Неправильний формат номеру телефону.",
       redirecting: "Перенаправлення на Google Maps...",
       errorRateLimit: "Перевищено ліміт відправки відгуків. Спробуйте пізніше.",
-      errorAdblock: "Будь ласка, вимкніть AdBlock, щоб надіслати відгук."
+      errorAdblock: "Будь ласка, вимкніть AdBlock, щоб надіслати відгук.",
+      directGoogleLink: "Я хочу перейти безпосередньо до Google Maps"
     },
     ru: {
       loading: "Загрузка...",
@@ -175,7 +178,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorPhone: "Неправильный формат номера телефона.",
       redirecting: "Перенаправление на Google Maps...",
       errorRateLimit: "Превышен лимит отправки отзывов. Попробуйте позже.",
-      errorAdblock: "Пожалуйста, отключите AdBlock для отправки отзыва."
+      errorAdblock: "Пожалуйста, отключите AdBlock для отправки отзыва.",
+      directGoogleLink: "Я хочу перейти напрямую в Google Карты"
     }
   };
 
@@ -209,6 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const messageError = document.getElementById('message-error');
   const phoneError = document.getElementById('phone-error');
+  const linkDirectGoogle = document.getElementById('link-direct-google');
 
   const landingContactForm = document.getElementById('landing-contact-form');
   const landingEmail = document.getElementById('landing-email');
@@ -391,6 +396,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (clientConfig.logo) {
         clientLogo.src = clientConfig.logo;
         clientLogo.alt = `Logo ${clientConfig.name}`;
+      }
+
+      // Initialize Omnibus-compliance Google Maps link
+      if (linkDirectGoogle && clientConfig.googleMapsUrl) {
+        linkDirectGoogle.href = clientConfig.googleMapsUrl;
+        linkDirectGoogle.target = "_blank";
+        linkDirectGoogle.rel = "noopener noreferrer";
       }
 
       // 4. Show Screen 1
