@@ -190,7 +190,7 @@
             <label for="feedback-phone" class="input-label" data-i18n="phoneLabel">Numer telefonu (opcjonalnie)</label>
             <input type="tel" id="feedback-phone" name="phone" class="form-input" placeholder="+48 123 456 789" />
             <span class="error-msg" id="phone-error"></span>
-            <p class="rodo-disclaimer" data-i18n="rodoDisclaimer">Podając numer telefonu, zgadzasz się na kontakt w celu rozwiązania zgłoszonego problemu.</p>
+            <p class="rodo-disclaimer" id="rodo-disclaimer" data-i18n-html="rodoDisclaimer">Podając numer telefonu, zgadzasz się na kontakt w celu rozwiązania zgłoszonego problemu. Szczegóły w <a href="/polityka-prywatnosci.html" target="_blank" rel="noopener noreferrer">Polityce Prywatności</a>.</p>
           </div>
 
           <button type="submit" id="submit-btn" class="btn btn-primary">
@@ -221,6 +221,10 @@
 
     <!-- App Watermark -->
     <footer class="app-watermark" id="app-watermark">
+      <div class="footer-legal-links" style="margin-bottom: 8px; display: flex; gap: 15px; font-size: 0.75rem; justify-content: center; width: 100%;">
+        <a href="/regulamin.html" target="_blank" style="color: var(--text-muted); text-decoration: underline;">Regulamin</a>
+        <a href="/polityka-prywatnosci.html" target="_blank" style="color: var(--text-muted); text-decoration: underline;">Polityka Prywatności</a>
+      </div>
       <a href="https://revshield.pl" target="_blank" rel="noopener noreferrer">
         Powered by <span>ReviewShield 🛡️</span>
       </a>
