@@ -14,5 +14,10 @@
     "logo": "/assets/kredki_logo.jpg",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Kredki+Cafe+Store+Mieroslawskiego+Warszawa",
     "adminEmail": "rvwshield@gmail.com"
+  },
+  "amar_beirut": {
+    "name": "Amar Beirut",
+    "logo": "/assets/amar_beirut_logo.jpg",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Amar+Beirut+Fabryka+Norblina+Warszawa"
   }
 }
