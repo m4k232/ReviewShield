@@ -127,6 +127,14 @@ class handler(BaseHTTPRequestHandler):
         self.wfile.write(b"404 Not Found")
 
     def do_POST(self):
+        parsed_url = urllib.parse.urlparse(self.path)
+        if parsed_url.path != "/api/feedback":
+            self._send_json(404, {
+                "status": "error",
+                "message": "Endpoint not found"
+            })
+            return
+
         # 1. Parse content type
         content_type = self.headers.get('Content-Type', '')
         if 'application/json' not in content_type:
@@ -141,6 +149,12 @@ class handler(BaseHTTPRequestHandler):
             self._send_json(400, {
                 "status": "error",
                 "message": "Empty request body"
+            })
+            return
+        if content_length > 10240:
+            self._send_json(413, {
+                "status": "error",
+                "message": "Payload too large (max 10KB)"
             })
             return
             
@@ -200,6 +214,11 @@ class handler(BaseHTTPRequestHandler):
                         return
             except Exception as e:
                 print(f"[WARNING] reCAPTCHA verification failed network call: {e}")
+                self._send_json(500, {
+                    "status": "error",
+                    "message": "Security verification temporarily unavailable. Please try again."
+                })
+                return
             
         try:
             rating_val = int(rating)
@@ -215,9 +234,12 @@ class handler(BaseHTTPRequestHandler):
         # 4. Generate current timestamp in UTC
         timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
         
+        # Fetch client configuration once
+        client_config = get_client_config(client_id) if client_id != 'LANDING_PAGE_LEAD' else None
+
         # 5. Save feedback data
         try:
-            save_method = self._save_feedback(timestamp, client_id, rating_val, message, phone, waiter_id, table_id)
+            save_method = self._save_feedback(timestamp, client_id, rating_val, message, phone, waiter_id, table_id, client_config)
             
             # Send Telegram notification for landing page leads
             if client_id == 'LANDING_PAGE_LEAD':
@@ -264,11 +286,7 @@ class handler(BaseHTTPRequestHandler):
             else:
                 # Send email alert for negative feedback (1, 2 or 3 stars)
                 if rating_val <= 3:
-                    recipient_email = None
-                    client_config = get_client_config(client_id)
-                    if client_config:
-                        recipient_email = client_config.get("adminEmail")
-                        
+                    recipient_email = client_config.get("adminEmail") if client_config else None
                     email_subject = f"⚠️ [ReviewShield] Nowa negatywna opinia ({rating_val}★) - {client_id}"
                     
                     table_row = f"""
@@ -304,11 +322,11 @@ class handler(BaseHTTPRequestHandler):
                           </tr>
                           <tr>
                             <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Treść opinii:</td>
-                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222; font-style: italic;">"{message}"</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222; font-style: italic;">"{html.escape(message)}"</td>
                           </tr>
                           <tr>
                             <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Numer telefonu:</td>
-                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222;">{phone or 'Nie podano'}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #222;">{html.escape(phone) if phone else 'Nie podano'}</td>
                           </tr>
                           <tr>
                             <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Czas zapisu:</td>
@@ -467,7 +485,7 @@ class handler(BaseHTTPRequestHandler):
             print(f"[ERROR] Failed to send Email notification: {e}")
             return False
 
-    def _save_feedback(self, timestamp, client_id, rating, message, phone, waiter_id='', table_id=''):
+    def _save_feedback(self, timestamp, client_id, rating, message, phone, waiter_id='', table_id='', client_config=None):
         save_methods = []
         
         # 1. Save to Firestore
@@ -494,19 +512,12 @@ class handler(BaseHTTPRequestHandler):
         
         is_lead = (client_id == 'LANDING_PAGE_LEAD')
         
-        # Load custom spreadsheet ID from Firestore if present
-        if not is_lead:
-            try:
-                db = get_firestore_client()
-                client_doc = db.collection('clients').document(client_id).get()
-                if client_doc.exists:
-                    client_data = client_doc.to_dict()
-                    custom_sid = client_data.get("spreadsheetId")
-                    if custom_sid:
-                        spreadsheet_id = custom_sid
-                        print(f"[INFO] Using custom spreadsheet ID from Firestore for client {client_id}: {spreadsheet_id}")
-            except Exception as fe:
-                print(f"[WARNING] Failed to load custom spreadsheet ID from Firestore: {fe}")
+        # Use custom spreadsheet ID from pre-fetched client_config if available
+        if not is_lead and client_config:
+            custom_sid = client_config.get("spreadsheetId")
+            if custom_sid:
+                spreadsheet_id = custom_sid
+                print(f"[INFO] Using custom spreadsheet ID from Firestore for client {client_id}: {spreadsheet_id}")
         
         target_sheet = "Leads" if is_lead else sheet_name
         
