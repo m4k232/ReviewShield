@@ -380,11 +380,18 @@ class handler(BaseHTTPRequestHandler):
                 "message": f"Failed to save feedback: {str(e)}"
             })
 
+    def _get_cors_origin(self):
+        origin = self.headers.get('Origin', '')
+        allowed_domains = ['revshield.pl', 'localhost', '127.0.0.1', 'vercel.app']
+        if any(domain in origin for domain in allowed_domains):
+            return origin
+        return 'https://revshield.pl'
+
     def _send_json(self, status_code, data):
         self.send_response(status_code)
         self.send_header('Content-Type', 'application/json')
-        # Setup CORS headers for development/cross-origin needs
-        self.send_header('Access-Control-Allow-Origin', '*')
+        # Setup CORS headers for allowed origins
+        self.send_header('Access-Control-Allow-Origin', self._get_cors_origin())
         self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
@@ -393,7 +400,7 @@ class handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
         # Support CORS preflight requests
         self.send_response(204)
-        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Origin', self._get_cors_origin())
         self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
