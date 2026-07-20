@@ -32,9 +32,11 @@ def get_firestore_client():
 # Local fallback config helper
 def get_client_from_json(cid):
     candidates = [
-        os.path.join(os.getcwd(), 'public', 'clients.json'),
-        os.path.join(os.path.dirname(__file__), '..', 'public', 'clients.json'),
-        'public/clients.json'
+        os.path.join(os.path.dirname(__file__), 'clients.json'),
+        os.path.join(os.getcwd(), 'api', 'clients.json'),
+        os.path.join(os.getcwd(), 'clients.json'),
+        'api/clients.json',
+        'clients.json'
     ]
     for p in candidates:
         if os.path.exists(p) and os.path.isfile(p):
