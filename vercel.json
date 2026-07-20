@@ -6,7 +6,6 @@
     { "src": "/assets/(.*)", "dest": "/assets/$1" },
     { "src": "/regulamin.html", "dest": "/regulamin.html" },
     { "src": "/polityka-prywatnosci.html", "dest": "/polityka-prywatnosci.html" },
-    { "src": "/diagram.html", "dest": "/diagram.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
